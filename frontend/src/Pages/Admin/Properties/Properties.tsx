@@ -1,19 +1,10 @@
 import { Table } from "antd";
-import { usePageStore } from "../../Stores/PageStore";
+import { usePageStore } from "../../../Stores/PageStore";
 import { RightOutlined, DownOutlined } from "@ant-design/icons";
 import { ChevronDown, ChevronRight, ChevronUp } from "lucide-react";
 
 const Properties = () => {
-  const {
-    pages,
-    pagesHouse,
-    pageSizes,
-    pageSizesHouse,
-    setPage,
-    setPageHouse,
-    setPageSize,
-    setPageSizesHouse,
-  } = usePageStore();
+  const { pages, pageSizes, setPage, setPageSize } = usePageStore();
   const dataSource = [
     {
       key: "1",

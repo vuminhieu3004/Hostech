@@ -3,3 +3,13 @@
 #root {
   font-family: "Inter", sans-serif;
 }
+
+.ul {
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 16px;
+}
+
+.ul::-webkit-scrollbar {
+  width: 0;
+}

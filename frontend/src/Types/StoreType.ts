@@ -7,11 +7,16 @@ export interface IOpenTypeStore {
 
 export interface IPageStore {
   pages: number;
-  pagesHouse: number;
   pageSizes: number;
-  pageSizesHouse: number;
   setPage: (pages: number) => void;
-  setPageHouse: (pagesHouse: number) => void;
   setPageSize: (pageSizes: number) => void;
-  setPageSizesHouse: (pageSizesHouse: number) => void;
+}
+
+export interface IOpenMenu {
+  openMenu1: boolean;
+  openMenu2: boolean;
+  openMenu3: boolean;
+  setOpenMenu1: (openMenu1: boolean) => void;
+  setOpenMenu2: (openMenu2: boolean) => void;
+  setOpenMenu3: (openMenu3: boolean) => void;
 }
