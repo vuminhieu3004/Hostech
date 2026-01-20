@@ -1,20 +1,23 @@
 import {
   ChartSpline,
   LayoutDashboard,
+  MapPinHouse,
   PanelRightClose,
   PanelRightOpen,
 } from "lucide-react";
 import { useOpenStore } from "../../Stores/OpenStore";
 import { Link } from "react-router";
 import { useState } from "react";
+import { useLocation } from "react-router";
 
 const SidebarAdmin = () => {
   const { open, setOpen } = useOpenStore();
-  const [action, setAction] = useState<string>(window.location.pathname);
+  const location = useLocation();
+  const [action, setAction] = useState<string>(location.pathname);
   return (
     <div
-      className={`h-200 duration-500 ease-in-out shadow ${
-        open ? "w-[6%]" : "w-[18%]"
+      className={`h-auto duration-500 ease-in-out shadow ${
+        open ? "w-[6%]" : "w-[20%]"
       }`}
     >
       <section className="relative">
@@ -45,7 +48,7 @@ const SidebarAdmin = () => {
           <ul className="p-5 mt-5 flex flex-col gap-3">
             <Link
               to="/admin"
-              onClick={() => setAction("admin")}
+              onClick={() => setAction("/admin")}
               className={`${
                 action == "/admin"
                   ? "bg-blue-500 p-4 text-white font-bold rounded-2xl"
@@ -68,7 +71,7 @@ const SidebarAdmin = () => {
             </Link>
             <Link
               to="/admin/statistical"
-              onClick={() => setAction("statistical")}
+              onClick={() => setAction("/admin/statistical")}
               className={`${
                 action == "/admin/statistical"
                   ? "bg-blue-500 p-4 text-white font-bold rounded-2xl"
@@ -85,6 +88,29 @@ const SidebarAdmin = () => {
                   <>
                     <ChartSpline />
                     Thống kê
+                  </>
+                )}
+              </li>
+            </Link>
+            <Link
+              to="/admin/properties"
+              onClick={() => setAction("/admin/properties")}
+              className={`${
+                action == "/admin/properties"
+                  ? "bg-blue-500 p-4 text-white font-bold rounded-2xl"
+                  : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+              }`}
+            >
+              {" "}
+              <li className="flex items-center gap-2">
+                {open ? (
+                  <span title="Thống kê">
+                    <MapPinHouse className="pr-1" />
+                  </span>
+                ) : (
+                  <>
+                    <MapPinHouse />
+                    Quản lý khu nhà
                   </>
                 )}
               </li>
