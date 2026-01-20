@@ -3,6 +3,7 @@
 * Sử dụng tailwindcss
 * Sử dụng zustand quản lý state global
 * Sử dụng antd
+* Sử dụng tanstack Query để call Api
 * Sử dụng zod để validate
 * Sử dụng cloudinary để quản lý hình ảnh
 * folder và tên component sử dụng PascalCase
