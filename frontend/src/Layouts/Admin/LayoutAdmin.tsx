@@ -10,7 +10,7 @@ const LayoutAdmin = () => {
         <SidebarAdmin />
         <main className="w-full flex flex-col overflow-scroll">
           <Header />
-          <div className="m-4">
+          <div className="ml-4 mr-4">
             <Outlet />
           </div>
         </main>
