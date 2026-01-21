@@ -40,7 +40,7 @@ const SidebarAdmin = () => {
             <img
               src="/images/logo_du_an.jpg"
               alt=""
-              className="w-15 h-15 rounded-full m-4"
+              className="w-13 h-13 rounded-full m-4"
             />
             <p className="font-semibold text-blue-900 text-2xl">Hostech</p>
           </div>
@@ -59,7 +59,7 @@ const SidebarAdmin = () => {
           </div>
         </div>
         <div>
-          <ul className="ul p-5 flex flex-col gap-2 max-h-150 overflow-scroll">
+          <ul className="ul p-5 pt-4 flex flex-col gap-2 max-h-150 overflow-scroll">
             <Link
               to="/admin"
               onClick={() => setAction("/admin")}

@@ -21,13 +21,13 @@ const Header = () => {
           </form>
         </div>
         <div className="relative flex items-center gap-3 mr-5">
-          <p className="w-14 h-14 border border-gray-300 rounded-full p-4 cursor-pointer">
+          <p className="w-12 h-12 border border-gray-300 rounded-full p-3 cursor-pointer">
             <Bell />
           </p>
-          <p className="absolute -inset-y-1 right-17 w-5 h-5 bg-red-500 rounded-full text-center leading-5 text-white font-semibold">
+          <p className="absolute -inset-y-1 right-15 w-5 h-5 bg-red-500 rounded-full text-center leading-5 text-white font-semibold">
             1
           </p>
-          <p className="w-14 h-14 border border-gray-300 rounded-full p-4 cursor-pointer">
+          <p className="w-12 h-12 border border-gray-300 rounded-full p-3 cursor-pointer">
             <UserRoundCheck />
           </p>
         </div>
