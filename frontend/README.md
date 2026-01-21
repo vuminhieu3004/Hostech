@@ -20,5 +20,5 @@
 * pages: Chứa thông tin các trang của admin, staff và user
 * Services: Quản lý call Api
 * Store: Quản lý state global các state dùng nhiều lần
-* Types: Chứa dữu liệu cảu interface và type
+* Types: Chứa dữu liệu của interface và type
 * App.tsx: Chứa router đường dẫn code
