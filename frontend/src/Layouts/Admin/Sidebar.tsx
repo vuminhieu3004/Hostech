@@ -40,9 +40,13 @@ const SidebarAdmin = () => {
             <img
               src="/images/logo_du_an.jpg"
               alt=""
-              className="w-13 h-13 rounded-full m-4"
+              className="w-13 h-13 rounded-full m-4 "
             />
-            <p className="font-semibold text-blue-900 text-2xl">Hostech</p>
+            <p
+              className={`font-semibold text-blue-900 text-2xl ${open ? "pl-2" : ""}`}
+            >
+              Hostech
+            </p>
           </div>
           <div>
             {open ? (
@@ -131,7 +135,7 @@ const SidebarAdmin = () => {
               )}
               {openMenu1 && (
                 <ul
-                  className={`flex flex-col justify-center gap-1 border p-2 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${
+                  className={`flex flex-col justify-center gap-1 border p-2 pl-3.5 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${
                     open == true ? "items-center" : ""
                   }`}
                 >
@@ -267,7 +271,7 @@ const SidebarAdmin = () => {
               )}
               {openMenu2 && (
                 <ul
-                  className={`flex flex-col justify-center gap-1 border p-2 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${
+                  className={`flex flex-col justify-center gap-1 border p-2 pl-3.5 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${
                     open == true ? "items-center" : ""
                   }`}
                 >
@@ -403,7 +407,7 @@ const SidebarAdmin = () => {
               )}
               {openMenu3 && (
                 <ul
-                  className={`flex flex-col justify-center gap-1 border p-2 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${
+                  className={`flex flex-col justify-center gap-1 border p-2 pl-3.5 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${
                     open == true ? "items-center" : ""
                   }`}
                 >
