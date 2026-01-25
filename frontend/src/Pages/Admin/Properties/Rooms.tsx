@@ -77,7 +77,7 @@ const Rooms = () => {
   return (
     <>
       <div>
-        <div className="mt-5 mb-5">
+        <div className="mb-5">
           <div className="flex flex-col w-50 justify-center">
             <label htmlFor="" className="pl-2 p-1 font-semibold">
               Lọc theo trạng thái
