@@ -1,6 +1,15 @@
-<h1 style="color:red">Chú ý khi test đăng nhập quyền OWNER thì đổi mail của t sang của người đăng nhập tại seeder/AuthLoginFakeSeeder.php để nhận OTP đăng nhập tránh spam gửi OTP sang mail t nhé! </h1>
-<h1>Cách dùng RBAC </h1>
-(VÍ DỤ KHI THÊM 1 TÍNH NĂNG : packing_lots) sau khi tạo migraton và models ta làm theo các bước:
+> [!WARNING]
+> **CHÚ Ý QUAN TRỌNG:** Khi test đăng nhập quyền **OWNER**, hãy đổi email của tớ sang email của người đang đăng nhập tại `database/seeders/AuthLoginFakeSeeder.php` để nhận OTP.
+>
+> **Tuyệt đối không spam gửi OTP sang email của tớ!**
+
+---
+
+# HƯỚNG DẪN TÍCH HỢP RBAC
+
+**(Ví dụ minh họa: Thêm tính năng `parking_lots`)**
+
+Sau khi tạo Migration và Models, thực hiện lần lượt các bước sau:
 
 <h2>B1: truy cập file config/rbac.php tại mục modules để định nghĩa các chức năng</h2>
 <h3>Ví dụ :</h3>
