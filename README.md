@@ -1,3 +1,4 @@
+<h1 style="color:red">Chú ý khi test đăng nhập quyền OWNER thì đổi mail của t sang của người đăng nhập tại seeder/AuthLoginFakeSeeder.php để nhận OTP đăng nhập tránh spam gửi OTP sang mail t nhé! </h1>
 <h1>Cách dùng RBAC </h1>
 (VÍ DỤ KHI THÊM 1 TÍNH NĂNG : packing_lots) sau khi tạo migraton và models ta làm theo các bước:
 
