@@ -27,6 +27,9 @@ return Application::configure(basePath: dirname(__DIR__))
         //     $session = (string) $request->input('session_id', '');
         //     return Limit::perMinute(3)->by($request->ip() . '|' . $session);
         // });
+        $middleware->alias([
+            'rbac' => \App\Http\Middleware\RbacMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

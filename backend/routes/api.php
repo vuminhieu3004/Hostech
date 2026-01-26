@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuditLogController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\RegisterOwnerController;
 use App\Http\Controllers\Api\Auth\LoginPasswordController;
@@ -30,4 +31,8 @@ Route::prefix('auth')->group(function () {
         Route::get('me', fn($r) => $r->user());
         Route::post('logout', LogoutController::class);
     });
+});
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])
+        ->middleware('rbac:audit_logs.view');
 });

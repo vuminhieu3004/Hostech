@@ -7,13 +7,15 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasUuids, Notifiable, HasFactory;
+    use HasApiTokens, HasUuids, Notifiable, HasFactory, HasRoles;
 
     public $incrementing = false;
     protected $keyType = 'string';
+    protected $guard_name = 'sanctum';
 
     protected $fillable = [
         'org_id',
@@ -42,7 +44,7 @@ class User extends Authenticatable
     protected $hidden = ['password_hash', 'mfa_secret_encrypted'];
 
     protected $casts = [
-        'password_hash' => 'hashed',
+        // 'password_hash' => 'hashed',
         'is_active' => 'boolean',
         'locked_until' => 'datetime',
         'last_login_at' => 'datetime',
@@ -61,5 +63,9 @@ class User extends Authenticatable
     public function org()
     {
         return $this->belongsTo(\App\Models\Org::class, 'org_id');
+    }
+    public function propertyUserRoles()
+    {
+        return $this->hasMany(\App\Models\PropertyUserRole::class, 'user_id');
     }
 }

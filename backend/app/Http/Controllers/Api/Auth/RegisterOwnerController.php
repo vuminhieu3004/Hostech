@@ -53,7 +53,7 @@ class RegisterOwnerController extends Controller
                 'is_active' => true,
                 'failed_login_count' => 0,
             ]);
-
+            $user->syncRoles(['Owner']);
             // Sau register -> gửi OTP (chưa cấp token)
             $challenge = $auth->startOtpChallenge($user, [
                 'device_id' => $data['device_id'] ?? null,
