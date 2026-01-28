@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class RegisterOwnerController extends Controller
 {
@@ -28,6 +29,56 @@ class RegisterOwnerController extends Controller
             'device_platform' => ['nullable', 'string', 'max:50'],
             'device_fingerprint' => ['nullable', 'string', 'max:255'],
         ]);
+        // Validation: Phải có ít nhất email hoặc phone
+        if (empty($data['email']) && empty($data['phone'])) {
+            return response()->json([
+                'message' => 'Vui lòng cung cấp ít nhất email hoặc số điện thoại.'
+            ], 422);
+        }
+
+        // Kiểm tra email/phone đã tồn tại chưa
+        if (!empty($data['email'])) {
+            $existingEmail = User::where('email', $data['email'])->first();
+            if ($existingEmail) {
+                return response()->json([
+                    'message' => 'Email đã được sử dụng.'
+                ], 422);
+            }
+        }
+
+        if (!empty($data['phone'])) {
+            $existingPhone = User::where('phone', $data['phone'])->first();
+            if ($existingPhone) {
+                return response()->json([
+                    'message' => 'Số điện thoại đã được sử dụng.'
+                ], 422);
+            }
+        }
+        // Validation: Phải có ít nhất email hoặc phone
+        if (empty($data['email']) && empty($data['phone'])) {
+            return response()->json([
+                'message' => 'Vui lòng cung cấp ít nhất email hoặc số điện thoại.'
+            ], 422);
+        }
+
+        // Kiểm tra email/phone đã tồn tại chưa
+        if (!empty($data['email'])) {
+            $existingEmail = User::where('email', $data['email'])->first();
+            if ($existingEmail) {
+                return response()->json([
+                    'message' => 'Email đã được sử dụng.'
+                ], 422);
+            }
+        }
+
+        if (!empty($data['phone'])) {
+            $existingPhone = User::where('phone', $data['phone'])->first();
+            if ($existingPhone) {
+                return response()->json([
+                    'message' => 'Số điện thoại đã được sử dụng.'
+                ], 422);
+            }
+        }
 
         return DB::transaction(function () use ($data, $request, $auth) {
             $org = Org::create([
@@ -46,15 +97,14 @@ class RegisterOwnerController extends Controller
                 'full_name' => $data['full_name'],
                 'phone' => $data['phone'] ?? null,
                 'email' => $data['email'] ?? null,
-
-                // QUAN TRỌNG: hash password
                 'password_hash' => Hash::make($data['password']),
-
                 'is_active' => true,
                 'failed_login_count' => 0,
             ]);
+
             $user->syncRoles(['Owner']);
-            // Sau register -> gửi OTP (chưa cấp token)
+
+            // Gửi OTP qua email hoặc SMS tùy theo thông tin user cung cấp
             $challenge = $auth->startOtpChallenge($user, [
                 'device_id' => $data['device_id'] ?? null,
                 'device_name' => $data['device_name'] ?? 'web',
@@ -69,6 +119,7 @@ class RegisterOwnerController extends Controller
 
             AuditLogger::log($org->id, $user->id, 'AUTH_REGISTER_OWNER_OTP_SENT', 'user_sessions', $challenge['session_id'], [
                 'session_id' => $challenge['session_id'],
+                'otp_method' => $challenge['otp_method'] ?? 'email',
             ], $request);
 
             return response()->json([
@@ -77,7 +128,8 @@ class RegisterOwnerController extends Controller
                 'user' => $user,
                 'session_id' => $challenge['session_id'],
                 'otp_ttl' => $challenge['otp_ttl'],
-                'dev_otp' => $challenge['dev_otp'] ?? null, // chỉ local
+                'otp_method' => $challenge['otp_method'] ?? 'email',
+                'dev_otp' => $challenge['dev_otp'] ?? null,
             ], 201);
         });
     }

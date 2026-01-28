@@ -68,7 +68,7 @@ class AuthLoginFakeSeeder extends Seeder
             $ownerId = $upsertUser([
                 'role' => 'OWNER',
                 'full_name' => 'Owner Demo',
-                'phone' => '0901111111',
+                'phone' => '0368326144',
                 'email' => 'Vutienhieu202@gmail.com',
                 'password_hash' => Hash::make('12345678'),
                 'phone_verified_at' => now(),
@@ -184,7 +184,7 @@ class AuthLoginFakeSeeder extends Seeder
                 'meta' => json_encode(['seed' => true, 'locked' => true]),
             ]);
 
-            $this->command?->info("✅ Auth fake data seeded!");
+            $this->command?->info(" Auth fake data seeded!");
             $this->command?->info("ORG_ID: {$orgId}");
             $this->command?->info("Owner login: owner@hostech.test / 12345678");
             $this->command?->info("Staff login: staff@hostech.test / 12345678");

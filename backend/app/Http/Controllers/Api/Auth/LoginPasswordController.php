@@ -14,7 +14,7 @@ class LoginPasswordController extends Controller
     public function __invoke(Request $request, AuthSessionService $auth)
     {
         $data = $request->validate([
-            'login' => ['required', 'string'],
+            'login' => ['required', 'string'], // Chấp nhận cả email và phone
             'password' => ['required', 'string'],
 
             'device_id' => ['nullable', 'string', 'max:255'],
@@ -120,6 +120,7 @@ class LoginPasswordController extends Controller
 
         AuditLogger::log($orgId, $user->id, 'AUTH_LOGIN_PASSWORD_OK_OTP_SENT', 'user_sessions', $challenge['session_id'], [
             'session_id' => $challenge['session_id'],
+            'otp_method' => $challenge['otp_method'] ?? 'email',
         ], $request);
 
         return response()->json([
@@ -127,6 +128,7 @@ class LoginPasswordController extends Controller
             'org_id' => $orgId, // tiện cho FE giữ context
             'session_id' => $challenge['session_id'],
             'otp_ttl' => $challenge['otp_ttl'],
+            'otp_method' => $challenge['otp_method'] ?? 'email', // 'sms' hoặc 'email'
             'dev_otp' => $challenge['dev_otp'] ?? null, // chỉ local
         ]);
     }

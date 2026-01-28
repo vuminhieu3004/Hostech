@@ -1,21 +1,26 @@
 <?php
 
-use App\Http\Controllers\Api\AuditLogController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\Auth\RegisterOwnerController;
-use App\Http\Controllers\Api\Auth\LoginPasswordController;
-use App\Http\Controllers\Api\Auth\OtpRequestController;
-use App\Http\Controllers\Api\Auth\OtpVerifyController;
-use App\Http\Controllers\Api\Auth\RefreshController;
-use App\Http\Controllers\Api\Auth\LogoutController;
-use App\Http\Controllers\Api\AdminLookupController;
-use App\Http\Controllers\Api\PropertyStaffController;
 use App\Http\Controllers\Api\RoomController;
+use App\Http\Controllers\Api\AuditLogController;
+use App\Http\Controllers\Api\AdminLookupController;
+use App\Http\Controllers\Api\Auth\LogoutController;
+use App\Http\Controllers\Api\Auth\RefreshController;
+use App\Http\Controllers\Api\PropertyStaffController;
+use App\Http\Controllers\Api\Auth\OtpVerifyController;
+use App\Http\Controllers\Api\Auth\OtpRequestController;
+use App\Http\Controllers\Api\Auth\RegisterUserController;
+use App\Http\Controllers\Api\Auth\LoginPasswordController;
+use App\Http\Controllers\Api\Auth\RegisterOwnerController;
 
 Route::prefix('auth')->group(function () {
 
-    // Đăng ký owner + org (sau register sẽ gửi OTP để xác nhận đăng nhập)
+    // Đăng ký owner + org (public)
     Route::post('register', RegisterOwnerController::class);
+
+    // Đăng ký user mới (chỉ Owner/Manager)
+    Route::post('register-user', RegisterUserController::class)
+        ->middleware(['auth:sanctum', 'rbac:users.create']);
 
     // Step 1: login bằng password (tất cả role) -> tạo session PENDING_OTP + gửi OTP
     Route::post('login', LoginPasswordController::class);
