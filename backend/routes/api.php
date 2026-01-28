@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RoomController;
+use App\Http\Controllers\Api\PropertyController;
 use App\Http\Controllers\Api\AuditLogController;
 use App\Http\Controllers\Api\AdminLookupController;
 use App\Http\Controllers\Api\Auth\LogoutController;
@@ -61,8 +62,42 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/properties/{property}/staff/{staff}', [PropertyStaffController::class, 'revoke'])
         ->middleware('rbac:properties.staff.revoke');
 
+    // Property management routes with automatic property scoping
+    Route::middleware('property-scope')->group(function () {
+        // List properties (auto-filtered by allowed properties)
+        Route::get('/properties', [PropertyController::class, 'index'])
+            ->middleware('rbac:properties.view');
 
-    //test thử phân chia
-    // Route::get('/properties/{property}/rooms', [RoomController::class, 'index'])
-    //     ->middleware('rbac:rooms.view,property');
+        // View single property (auto-checked against allowed properties)
+        Route::get('/properties/{property}', [PropertyController::class, 'show'])
+            ->middleware('rbac:properties.view');
+
+        // Create property (Owner/Manager only)
+        Route::post('/properties', [PropertyController::class, 'store'])
+            ->middleware('rbac:properties.create');
+
+        // Update property (Owner/Manager only)
+        Route::put('/properties/{property}', [PropertyController::class, 'update'])
+            ->middleware('rbac:properties.update');
+
+        // Delete property (Owner only)
+        Route::delete('/properties/{property}', [PropertyController::class, 'destroy'])
+            ->middleware('rbac:properties.delete');
+
+        // Room management (scoped to allowed properties)
+        Route::get('/properties/{property}/rooms', [RoomController::class, 'index'])
+            ->middleware('rbac:rooms.view');
+
+        Route::post('/properties/{property}/rooms', [RoomController::class, 'store'])
+            ->middleware('rbac:rooms.create');
+
+        Route::get('/rooms/{room}', [RoomController::class, 'show'])
+            ->middleware('rbac:rooms.view');
+
+        Route::put('/rooms/{room}', [RoomController::class, 'update'])
+            ->middleware('rbac:rooms.update');
+
+        Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])
+            ->middleware('rbac:rooms.delete');
+    });
 });
