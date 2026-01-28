@@ -10,7 +10,6 @@ class PropertyUserRole extends Model
     use HasUuids;
 
     protected $table = 'property_user_roles';
-
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
