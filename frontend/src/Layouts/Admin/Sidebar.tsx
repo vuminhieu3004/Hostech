@@ -114,7 +114,7 @@ const SidebarAdmin = () => {
               {open === false ? (
                 <li>
                   <div
-                    className="flex items-center gap-2 cursor-pointer"
+                    className="flex items-center gap-2 cursor-pointer p-2.5 p-2.5"
                     onClick={() => setOpenMenu1(!openMenu1)}
                   >
                     <h2 className="font-semibold">Quản lý khu nhà</h2>
@@ -146,7 +146,7 @@ const SidebarAdmin = () => {
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2 ${
+                        className={`flex items-center gap-2  ${
                           action == "/admin/properties"
                             ? "bg-blue-500 p-4 text-white shadow-sm shadow-gray-300 font-bold rounded-2xl"
                             : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
@@ -250,7 +250,7 @@ const SidebarAdmin = () => {
               {open === false ? (
                 <li>
                   <div
-                    className="flex items-center gap-2 cursor-pointer"
+                    className="flex items-center gap-2 cursor-pointer p-2.5"
                     onClick={() => setOpenMenu2(!openMenu2)}
                   >
                     <h2 className="font-semibold">Quản lý khu nhà</h2>
@@ -386,7 +386,7 @@ const SidebarAdmin = () => {
               {open === false ? (
                 <li>
                   <div
-                    className="flex items-center gap-2 cursor-pointer"
+                    className="flex items-center gap-2 cursor-pointer p-2.5"
                     onClick={() => setOpenMenu3(!openMenu3)}
                   >
                     <h2 className="font-semibold">Quản lý khu nhà</h2>
