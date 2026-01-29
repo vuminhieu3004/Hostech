@@ -13,7 +13,7 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->command->info('🔑 Tạo Roles và Permissions...');
+        $this->command->info(' Tạo Roles và Permissions...');
 
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
