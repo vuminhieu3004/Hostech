@@ -9,6 +9,7 @@ import Zones from "./Pages/Admin/Properties/Zones";
 import Floors from "./Pages/Admin/Properties/Floors";
 import Rooms from "./Pages/Admin/Properties/Rooms";
 import VerifyOTP from "./Pages/Client/VerifyOTP";
+import Notfound from "./Pages/Client/404";
 
 function App() {
   const router = useRoutes([
@@ -27,6 +28,7 @@ function App() {
         { path: "rooms", Component: Rooms },
       ],
     },
+    { path: "*", Component: Notfound },
   ]);
   return router;
 }
