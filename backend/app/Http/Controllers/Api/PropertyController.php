@@ -25,7 +25,7 @@ class PropertyController extends Controller
                 'data' => [],
                 'meta' => [
                     'total' => 0,
-                    'message' => 'No properties accessible'
+                    'message' => 'Không có bất động sản nào khả dụng'
                 ]
             ]);
         }
@@ -74,9 +74,7 @@ class PropertyController extends Controller
                 'required',
                 'string',
                 'max:50',
-                Rule::unique('properties')->where(function ($query) use ($request) {
-                    return $query->where('org_id', $request->user()->org_id);
-                })
+                'unique:properties,code,NULL,id,org_id,' . $request->user()->org_id // Rút gọn Rule::unique để dễ nhìn hơn
             ],
             'address' => 'nullable|string|max:500',
             'description' => 'nullable|string',
@@ -116,7 +114,7 @@ class PropertyController extends Controller
         return response()->json([
             'success' => true,
             'data' => $property,
-            'message' => 'Property created successfully'
+            'message' => 'Tạo mới bất động sản thành công'
         ], 201);
     }
 
@@ -131,7 +129,7 @@ class PropertyController extends Controller
         if (!in_array($property->id, $scopedPropertyIds)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Property not found or access denied'
+                'message' => 'Không tìm thấy bất động sản hoặc không có quyền truy cập'
             ], 404);
         }
 
@@ -139,7 +137,7 @@ class PropertyController extends Controller
         if ($property->org_id !== $request->user()->org_id) {
             return response()->json([
                 'success' => false,
-                'message' => 'Access denied'
+                'message' => 'Truy cập bị từ chối'
             ], 403);
         }
 
@@ -160,7 +158,7 @@ class PropertyController extends Controller
         if (!in_array($property->id, $scopedPropertyIds)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Property not found or access denied'
+                'message' => 'Không tìm thấy bất động sản hoặc không có quyền truy cập'
             ], 404);
         }
 
@@ -168,7 +166,7 @@ class PropertyController extends Controller
         if ($property->org_id !== $request->user()->org_id) {
             return response()->json([
                 'success' => false,
-                'message' => 'Access denied'
+                'message' => 'Truy cập bị từ chối'
             ], 403);
         }
 
@@ -221,7 +219,7 @@ class PropertyController extends Controller
         return response()->json([
             'success' => true,
             'data' => $property->fresh(),
-            'message' => 'Property updated successfully'
+            'message' => 'Cập nhật bất động sản thành công'
         ]);
     }
 
@@ -236,7 +234,7 @@ class PropertyController extends Controller
         if (!in_array($property->id, $scopedPropertyIds)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Property not found or access denied'
+                'message' => 'Không tìm thấy bất động sản hoặc không có quyền truy cập'
             ], 404);
         }
 
@@ -244,7 +242,7 @@ class PropertyController extends Controller
         if ($property->org_id !== $request->user()->org_id) {
             return response()->json([
                 'success' => false,
-                'message' => 'Access denied'
+                'message' => 'Truy cập bị từ chối'
             ], 403);
         }
 
@@ -263,7 +261,7 @@ class PropertyController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Property deleted successfully'
+            'message' => 'Xóa bất động sản thành công'
         ]);
     }
 }

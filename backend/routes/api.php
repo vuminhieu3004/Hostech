@@ -62,29 +62,29 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/properties/{property}/staff/{staff}', [PropertyStaffController::class, 'revoke'])
         ->middleware('rbac:properties.staff.revoke');
 
-    // Property management routes with automatic property scoping
+    // Các route quản lý bất động sản với cơ chế tự động giới hạn phạm vi (scoping)
     Route::middleware('property-scope')->group(function () {
-        // List properties (auto-filtered by allowed properties)
+        // Danh sách bất động sản (tự động lọc theo các bất động sản được phép truy cập)
         Route::get('/properties', [PropertyController::class, 'index'])
             ->middleware('rbac:properties.view');
 
-        // View single property (auto-checked against allowed properties)
+        // Xem chi tiết một bất động sản (tự động kiểm tra đối chiếu với danh sách được phép)
         Route::get('/properties/{property}', [PropertyController::class, 'show'])
             ->middleware('rbac:properties.view');
 
-        // Create property (Owner/Manager only)
+        // Tạo bất động sản mới (Chỉ dành cho Chủ sở hữu/quản lý)
         Route::post('/properties', [PropertyController::class, 'store'])
             ->middleware('rbac:properties.create');
 
-        // Update property (Owner/Manager only)
+        // Cập nhật thông tin bất động sản (Chỉ dành cho Chủ sở hữu/quản lý)
         Route::put('/properties/{property}', [PropertyController::class, 'update'])
             ->middleware('rbac:properties.update');
 
-        // Delete property (Owner only)
+        // Xóa bất động sản (Chỉ dành cho Chủ sở hữu)
         Route::delete('/properties/{property}', [PropertyController::class, 'destroy'])
             ->middleware('rbac:properties.delete');
 
-        // Room management (scoped to allowed properties)
+        // Quản lý phòng (được giới hạn trong phạm vi các bất động sản được phép)
         Route::get('/properties/{property}/rooms', [RoomController::class, 'index'])
             ->middleware('rbac:rooms.view');
 
