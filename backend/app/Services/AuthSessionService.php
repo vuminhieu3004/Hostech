@@ -20,10 +20,9 @@ class AuthSessionService
         $otp = $otpSvc->generate(6);
         $ttl = $otpSvc->ttlSeconds();
 
-        // Yêu cầu: gửi OTP qua EMAIL
-        $email = $user->email;
-        if (!$email) {
-            throw new \RuntimeException('USER_HAS_NO_EMAIL');
+        // Kiểm tra user có email hoặc phone không
+        if (!$user->email && !$user->phone) {
+            throw new \RuntimeException('USER_HAS_NO_CONTACT_METHOD');
         }
 
         UserSession::create([
@@ -49,12 +48,13 @@ class AuthSessionService
             'otp_attempts' => 0,
         ]);
 
-        // Gửi OTP qua Email
-        $otpSvc->send($email, $otp);
+        // Gửi OTP qua Email hoặc SMS (ưu tiên phone)
+        $method = $otpSvc->send($user->email, $user->phone, $otp);
 
         $res = [
             'session_id' => $sessionId,
             'otp_ttl' => $ttl,
+            'otp_method' => $method, // 'sms' hoặc 'email'
         ];
 
         // Chỉ trả OTP cho local để test
@@ -75,10 +75,11 @@ class AuthSessionService
             throw new \RuntimeException('SESSION_NOT_PENDING');
         }
 
-        // Lấy user để gửi email
+        // Lấy user
         $user = User::where('org_id', $orgId)->where('id', $session->user_id)->firstOrFail();
-        if (!$user->email) {
-            throw new \RuntimeException('USER_HAS_NO_EMAIL');
+
+        if (!$user->email && !$user->phone) {
+            throw new \RuntimeException('USER_HAS_NO_CONTACT_METHOD');
         }
 
         /** @var OtpService $otpSvc */
@@ -94,12 +95,13 @@ class AuthSessionService
         $session->last_seen_at = now();
         $session->save();
 
-        // Gửi lại OTP qua email
-        $otpSvc->send($user->email, $otp);
+        // Gửi lại OTP
+        $method = $otpSvc->send($user->email, $user->phone, $otp);
 
         $res = [
             'session_id' => $session->id,
             'otp_ttl' => $ttl,
+            'otp_method' => $method,
         ];
 
         if (app()->environment('local')) {

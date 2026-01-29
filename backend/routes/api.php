@@ -1,21 +1,27 @@
 <?php
 
-use App\Http\Controllers\Api\AuditLogController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\Auth\RegisterOwnerController;
-use App\Http\Controllers\Api\Auth\LoginPasswordController;
-use App\Http\Controllers\Api\Auth\OtpRequestController;
-use App\Http\Controllers\Api\Auth\OtpVerifyController;
-use App\Http\Controllers\Api\Auth\RefreshController;
-use App\Http\Controllers\Api\Auth\LogoutController;
-use App\Http\Controllers\Api\AdminLookupController;
-use App\Http\Controllers\Api\PropertyStaffController;
 use App\Http\Controllers\Api\RoomController;
+use App\Http\Controllers\Api\PropertyController;
+use App\Http\Controllers\Api\AuditLogController;
+use App\Http\Controllers\Api\AdminLookupController;
+use App\Http\Controllers\Api\Auth\LogoutController;
+use App\Http\Controllers\Api\Auth\RefreshController;
+use App\Http\Controllers\Api\PropertyStaffController;
+use App\Http\Controllers\Api\Auth\OtpVerifyController;
+use App\Http\Controllers\Api\Auth\OtpRequestController;
+use App\Http\Controllers\Api\Auth\RegisterUserController;
+use App\Http\Controllers\Api\Auth\LoginPasswordController;
+use App\Http\Controllers\Api\Auth\RegisterOwnerController;
 
 Route::prefix('auth')->group(function () {
 
-    // Đăng ký owner + org (sau register sẽ gửi OTP để xác nhận đăng nhập)
+    // Đăng ký owner + org (public)
     Route::post('register', RegisterOwnerController::class);
+
+    // Đăng ký user mới (chỉ Owner/Manager)
+    Route::post('register-user', RegisterUserController::class)
+        ->middleware(['auth:sanctum', 'rbac:users.create']);
 
     // Step 1: login bằng password (tất cả role) -> tạo session PENDING_OTP + gửi OTP
     Route::post('login', LoginPasswordController::class);
@@ -56,8 +62,42 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/properties/{property}/staff/{staff}', [PropertyStaffController::class, 'revoke'])
         ->middleware('rbac:properties.staff.revoke');
 
+    // Các route quản lý bất động sản với cơ chế tự động giới hạn phạm vi (scoping)
+    Route::middleware('property-scope')->group(function () {
+        // Danh sách bất động sản (tự động lọc theo các bất động sản được phép truy cập)
+        Route::get('/properties', [PropertyController::class, 'index'])
+            ->middleware('rbac:properties.view');
 
-    //test thử phân chia
-    // Route::get('/properties/{property}/rooms', [RoomController::class, 'index'])
-    //     ->middleware('rbac:rooms.view,property');
+        // Xem chi tiết một bất động sản (tự động kiểm tra đối chiếu với danh sách được phép)
+        Route::get('/properties/{property}', [PropertyController::class, 'show'])
+            ->middleware('rbac:properties.view');
+
+        // Tạo bất động sản mới (Chỉ dành cho Chủ sở hữu/quản lý)
+        Route::post('/properties', [PropertyController::class, 'store'])
+            ->middleware('rbac:properties.create');
+
+        // Cập nhật thông tin bất động sản (Chỉ dành cho Chủ sở hữu/quản lý)
+        Route::put('/properties/{property}', [PropertyController::class, 'update'])
+            ->middleware('rbac:properties.update');
+
+        // Xóa bất động sản (Chỉ dành cho Chủ sở hữu)
+        Route::delete('/properties/{property}', [PropertyController::class, 'destroy'])
+            ->middleware('rbac:properties.delete');
+
+        // Quản lý phòng (được giới hạn trong phạm vi các bất động sản được phép)
+        Route::get('/properties/{property}/rooms', [RoomController::class, 'index'])
+            ->middleware('rbac:rooms.view');
+
+        Route::post('/properties/{property}/rooms', [RoomController::class, 'store'])
+            ->middleware('rbac:rooms.create');
+
+        Route::get('/rooms/{room}', [RoomController::class, 'show'])
+            ->middleware('rbac:rooms.view');
+
+        Route::put('/rooms/{room}', [RoomController::class, 'update'])
+            ->middleware('rbac:rooms.update');
+
+        Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])
+            ->middleware('rbac:rooms.delete');
+    });
 });

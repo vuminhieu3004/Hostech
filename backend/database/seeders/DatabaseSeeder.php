@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,16 +14,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-
+        // Thứ tự seed quan trọng: Roles -> Orgs -> Users -> Properties -> PropertyUserRoles -> Rooms -> AuditLogs
         $this->call([
-            AuthLoginFakeSeeder::class,
+            RolePermissionSeeder::class,    // Bước 1: Tạo roles & permissions
+            OrgSeeder::class,                // Bước 2: Tạo organizations
+            UserSeeder::class,               // Bước 3: Tạo users (owner, manager, staff, tenant)
+            PropertySeeder::class,           // Bước 4: Tạo properties
+            PropertyUserRoleSeeder::class,   // Bước 5: Gán users vào properties
+            RoomSeeder::class,               // Bước 6: Tạo rooms trong properties
+            AuditLogSeeder::class,           // Bước 7: Tạo audit logs
         ]);
     }
 }
