@@ -9,6 +9,8 @@ import {
   PanelRightClose,
   PanelRightOpen,
   StretchHorizontal,
+  UserRoundCog,
+  Users,
   Warehouse,
 } from "lucide-react";
 import { useOpenMenu, useOpenStore } from "../../Stores/OpenStore";
@@ -253,7 +255,7 @@ const SidebarAdmin = () => {
                     className="flex items-center gap-2 cursor-pointer p-2.5"
                     onClick={() => setOpenMenu2(!openMenu2)}
                   >
-                    <h2 className="font-semibold">Quản lý khu nhà</h2>
+                    <h2 className="font-semibold">Quản lý người dùng </h2>
                     {openMenu2 ? (
                       <ChevronDown className="w-4.5" />
                     ) : (
@@ -266,7 +268,7 @@ const SidebarAdmin = () => {
                   title="Quản lý khu nhà"
                   onClick={() => setOpenMenu2(!openMenu2)}
                 >
-                  <MapPinHouse className="cursor-pointer ml-3" />
+                  <UserRoundCog className="cursor-pointer ml-3" />
                 </div>
               )}
               {openMenu2 && (
@@ -290,12 +292,12 @@ const SidebarAdmin = () => {
                       >
                         {open ? (
                           <span title="Quản lý khu nhà">
-                            <House className="pr-1" />
+                            <Users className="pr-1" />
                           </span>
                         ) : (
                           <>
-                            <House />
-                            Quản lý nhà
+                            <Users />
+                            Quản lý
                           </>
                         )}
                       </div>
@@ -316,12 +318,12 @@ const SidebarAdmin = () => {
                       >
                         {open ? (
                           <span title="Quản lý khu">
-                            <MapPinCheck className="pr-1" />
+                            <Users className="pr-1" />
                           </span>
                         ) : (
                           <>
-                            <MapPinCheck />
-                            Quản lý khu
+                            <Users />
+                            Người thuê trọ
                           </>
                         )}
                       </div>
@@ -342,38 +344,12 @@ const SidebarAdmin = () => {
                       >
                         {open ? (
                           <span title="Quản lý tầng">
-                            <StretchHorizontal className="pr-1" />
+                            <Users className="pr-1" />
                           </span>
                         ) : (
                           <>
-                            <StretchHorizontal />
-                            Quản lý tầng
-                          </>
-                        )}
-                      </div>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/admin/rooms"
-                      onClick={() => setAction("/admin/rooms")}
-                    >
-                      {" "}
-                      <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/rooms"
-                            ? "bg-blue-500 p-4 text-white font-bold shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
-                      >
-                        {open ? (
-                          <span title="Quản lý phòng">
-                            <Warehouse className="pr-1" />
-                          </span>
-                        ) : (
-                          <>
-                            <Warehouse />
-                            Quản lý phòng
+                            <Users />
+                            Nhân viên
                           </>
                         )}
                       </div>

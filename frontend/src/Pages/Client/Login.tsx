@@ -3,30 +3,64 @@ import { useOpenStore } from "../../Stores/OpenStore";
 import { Eye, EyeClosed } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Login } from "../../Services/Auth.service";
-import type { ILogin } from "../../Types/Auth.Type";
-import { message } from "antd";
+import type { ILogin, ILoginResponse } from "../../Types/Auth.Type";
+import { message, Modal } from "antd";
 import { data, useNavigate } from "react-router";
+import { useState } from "react";
 
 const AuthPage = () => {
   const { eyePassword, setEyePassword } = useOpenStore();
   const nav = useNavigate();
   const queryClient = useQueryClient();
   const { register, handleSubmit, reset } = useForm<ILogin>();
+  const [pendingLogin, setPendingLogin] = useState<ILogin | null>(null);
+  const [orgs, setOrgs] = useState<any[]>([]);
+
   const loginMutation = useMutation({
-    mutationFn: (dataForm: ILogin) => Login(dataForm),
-    onSuccess: (response) => {
-      message.success("Đăng nhập thành công yêu cầu xác thực mã OTP");
-      nav("/otp/verify", { state: { login: response.data.login } });
-      queryClient.setQueryData([""], () => response.data);
+    mutationFn: Login,
+
+    onSuccess: (res) => {
+      const data = res.data as ILoginResponse;
+
+      message.success("Mật khẩu đúng, vui lòng nhập OTP");
+
+      nav("/otp/verify", {
+        state: {
+          session_id: data.session_id,
+          org_id: data.org_id,
+          otp_ttl: data.otp_ttl,
+          dev_otp: data.dev_otp,
+        },
+      });
       reset({});
     },
-    onError: () => {
-      message.error("Đăng nhập thất bại");
+
+    onError: (err: any) => {
+      const status = err?.response?.status;
+      const data = err?.response?.data;
+
+      if (status === 422) {
+        message.error("Sai email / số điện thoại hoặc mật khẩu");
+      }
+
+      if (status === 403) {
+        message.error("Tài khoản đã bị khoá");
+      }
+
+      if (status === 423) {
+        message.warning(`Tài khoản bị khoá tạm đến ${data.locked_until}`);
+      }
+
+      if (status === 409) {
+        setOrgs(data.orgs);
+      }
     },
   });
 
-  const handleLogin = (dataLogin: ILogin) => {
-    loginMutation.mutate(dataLogin as ILogin);
+  const handleLogin = (data: ILogin) => {
+    console.log(data);
+    setPendingLogin(data);
+    loginMutation.mutate(data);
   };
   return (
     <>
@@ -64,7 +98,7 @@ const AuthPage = () => {
                   <input
                     type="text"
                     placeholder="email hoặc số điện thoại..."
-                    {...register("login")}
+                    {...register("login", { required: true })}
                     className="w-full border border-gray-400 rounded-[10px] focus:outline-none p-2"
                   />
                 </div>
@@ -75,7 +109,7 @@ const AuthPage = () => {
                   <input
                     type={eyePassword ? "text" : "password"}
                     placeholder="Nhập mật khẩu đăng nhập..."
-                    {...register("password")}
+                    {...register("password", { required: true })}
                     className="w-full border border-gray-400 rounded-[10px] focus:outline-none p-2"
                   />
                   <div className="absolute inset-y-10 right-4">
@@ -115,6 +149,30 @@ const AuthPage = () => {
           </div>
         </section>
       </div>
+
+      <Modal
+        open={orgs.length > 0}
+        footer={null}
+        onCancel={() => setOrgs([])}
+        title="Chọn tổ chức"
+      >
+        {orgs.map((org) => (
+          <button
+            key={org.org_id}
+            onClick={() => {
+              if (!pendingLogin) return;
+
+              loginMutation.mutate({
+                ...pendingLogin,
+                org_id: org.org_id,
+              });
+            }}
+            className="w-full text-left p-2 hover:bg-gray-100"
+          >
+            {org.org_name}
+          </button>
+        ))}
+      </Modal>
     </>
   );
 };
