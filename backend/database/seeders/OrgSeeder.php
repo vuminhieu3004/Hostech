@@ -12,7 +12,7 @@ class OrgSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->command->info('🏢 Tạo 10 Organizations...');
+        $this->command->info(' Tạo 10 Organizations...');
 
         // Tạo 10 orgs ngẫu nhiên
         $orgs = Org::factory()->count(10)->create();

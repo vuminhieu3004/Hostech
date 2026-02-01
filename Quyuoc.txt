@@ -1,0 +1,28 @@
+Các câu lệnh được setup:
+
+#chạy cả BE và FE :
+npm start
+
+# Cài đặt dependencies cho cả FE và BE
+npm run install:all
+
+# Chỉ chạy backend
+npm run backend
+
+# Chỉ chạy frontend  
+npm run frontend
+
+# Build frontend (production)
+npm run build
+
+# Chạy migration
+npm run migrate
+
+# Reset database và seed lại
+npm run migrate:fresh
+
+# Test backend
+npm run test:backend
+
+# Lint frontend
+npm run lint:frontend

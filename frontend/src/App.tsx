@@ -1,5 +1,5 @@
 import { useRoutes } from "react-router";
-import AuthPage from "./Pages/Client/Auth";
+import AuthPage from "./Pages/Client/Login";
 import LayoutClient from "./Layouts/Client/LayoutClient";
 import LayoutAdmin from "./Layouts/Admin/LayoutAdmin";
 import Dashboard from "./Pages/Admin/Dashboard";
@@ -8,11 +8,14 @@ import Properties from "./Pages/Admin/Properties/Properties";
 import Zones from "./Pages/Admin/Properties/Zones";
 import Floors from "./Pages/Admin/Properties/Floors";
 import Rooms from "./Pages/Admin/Properties/Rooms";
+import VerifyOTP from "./Pages/Client/VerifyOTP";
+import Notfound from "./Pages/Client/404";
 
 function App() {
   const router = useRoutes([
     { path: "/", Component: LayoutClient },
     { path: "/auth", Component: AuthPage },
+    { path: "/otp/verify", Component: VerifyOTP },
     {
       path: "admin",
       Component: LayoutAdmin,
@@ -25,6 +28,7 @@ function App() {
         { path: "rooms", Component: Rooms },
       ],
     },
+    { path: "*", Component: Notfound },
   ]);
   return router;
 }

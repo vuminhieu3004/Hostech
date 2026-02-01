@@ -13,7 +13,7 @@ class PropertySeeder extends Seeder
      */
     public function run(): void
     {
-        $this->command->info('🏠 Tạo Properties cho mỗi Organization...');
+        $this->command->info(' Tạo Properties cho mỗi Organization...');
 
         $orgs = Org::all();
 
