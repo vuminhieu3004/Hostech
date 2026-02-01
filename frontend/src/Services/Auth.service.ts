@@ -17,6 +17,6 @@ export const Login = async (data: any) => {
 };
 
 // Verify OTP
-export const verifyOTP = async (data: IOtpVerify) => {
-  return await Api.post("auth/otp/verify", data);
+export const verifyOTP = async (data: any) => {
+  return Api.post("auth/otp/verify", data);
 };

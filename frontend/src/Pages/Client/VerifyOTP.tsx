@@ -3,13 +3,12 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router";
 import { message } from "antd";
 import Api from "../../Api/Api";
-
-type OTPForm = {
-  otp: string;
-};
+import type { IDecodeJWT, IOtpVerify } from "../../Types/Auth.Type";
+import { verifyOTP } from "../../Services/Auth.service";
+import { jwtDecode } from "jwt-decode";
 
 const VerifyOTP = () => {
-  const { register, handleSubmit } = useForm<OTPForm>();
+  const { register, handleSubmit } = useForm<IOtpVerify>();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -21,15 +20,17 @@ const VerifyOTP = () => {
     return null;
   }
 
-  const handleOTP = async (data: OTPForm) => {
+  const handleOTP = async (data: IOtpVerify) => {
     try {
-      await Api.post("auth/otp/verify", {
+      const res = await verifyOTP({
         session_id,
         org_id,
         otp: data.otp,
       });
 
       message.success("Xác thực OTP thành công");
+
+      localStorage.setItem("Token", res.data.access_token);
 
       navigate("/admin");
     } catch (err: any) {

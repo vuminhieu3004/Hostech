@@ -12,6 +12,10 @@ export interface ILoginResponse {
 }
 
 export interface IOtpVerify {
-  session_id: string;
   otp: string;
+}
+
+export interface IDecodeJWT {
+  id: number;
+  role: string;
 }
