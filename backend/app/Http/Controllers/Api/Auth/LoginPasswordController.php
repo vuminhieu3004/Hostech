@@ -25,6 +25,9 @@ class LoginPasswordController extends Controller
 
         $login = trim($data['login']);
 
+        // Xác định login method (email hay phone)
+        $loginMethod = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+
         // 1) Tìm user theo login (email/phone) trên toàn hệ thống
         $candidates = User::query()
             ->with(['org:id,name']) // cần relationship user->org
@@ -63,7 +66,7 @@ class LoginPasswordController extends Controller
         $user = $candidates->first();
         $orgId = $user->org_id;
 
-        // Audit attempt (kể cả fail) - giờ đã có org_id
+        // Audit attempt (kể cả fail)
         AuditLogger::log($orgId, $user->id, 'AUTH_LOGIN_PASSWORD_ATTEMPT', 'users', $user->id, [
             'login' => $login,
             'ip' => $request->ip(),
@@ -110,13 +113,13 @@ class LoginPasswordController extends Controller
         $user->locked_until = null;
         $user->save();
 
-        // 4) Start OTP challenge (gửi OTP qua email theo service của bạn)
+        // 4) Start OTP challenge (gửi OTP theo phương thức đăng nhập)
         $challenge = $auth->startOtpChallenge($user, [
             'device_id' => $data['device_id'] ?? null,
             'device_name' => $data['device_name'] ?? 'web',
             'device_platform' => $data['device_platform'] ?? 'Web',
             'device_fingerprint' => $data['device_fingerprint'] ?? null,
-        ], $request->ip(), $request->userAgent());
+        ], $request->ip(), $request->userAgent(), $loginMethod);
 
         AuditLogger::log($orgId, $user->id, 'AUTH_LOGIN_PASSWORD_OK_OTP_SENT', 'user_sessions', $challenge['session_id'], [
             'session_id' => $challenge['session_id'],
@@ -125,11 +128,12 @@ class LoginPasswordController extends Controller
 
         return response()->json([
             'message' => 'Mật khẩu đúng. OTP đã được gửi, vui lòng xác nhận để hoàn tất đăng nhập.',
-            'org_id' => $orgId, // tiện cho FE giữ context
+            'org_id' => $orgId,
             'session_id' => $challenge['session_id'],
             'otp_ttl' => $challenge['otp_ttl'],
             'otp_method' => $challenge['otp_method'] ?? 'email', // 'sms' hoặc 'email'
-            'dev_otp' => $challenge['dev_otp'] ?? null, // chỉ local
+            // 'otp_method' => 'email',
+            'dev_otp' => $challenge['dev_otp'] ?? null,
         ]);
     }
 }

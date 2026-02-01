@@ -30,6 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'rbac' => \App\Http\Middleware\RbacMiddleware::class,
             'property-scope' => \App\Http\Middleware\PropertyScopeMiddleware::class,
+            'jwt.auth' => \App\Http\Middleware\AuthenticateJwt::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

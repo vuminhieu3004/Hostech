@@ -81,18 +81,18 @@ class OtpService
 
     /**
      * Tự động chọn phương thức gửi OTP
-     * Ưu tiên: Phone > Email
+     * Ưu tiên: Email > Phone (vì SMS chưa tích hợp)
      */
     public function send(?string $email, ?string $phone, string $otp): string
     {
-        if ($phone) {
-            $this->sendSms($phone, $otp);
-            return 'sms';
-        }
-
         if ($email) {
             $this->sendEmail($email, $otp);
             return 'email';
+        }
+
+        if ($phone) {
+            $this->sendSms($phone, $otp);
+            return 'sms';
         }
 
         throw new \RuntimeException('USER_HAS_NO_CONTACT_METHOD');

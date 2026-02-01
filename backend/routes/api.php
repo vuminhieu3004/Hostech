@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\PropertyController;
 use App\Http\Controllers\Api\AuditLogController;
 use App\Http\Controllers\Api\AdminLookupController;
 use App\Http\Controllers\Api\Auth\LogoutController;
+use App\Http\Controllers\Api\Auth\MeController;
 use App\Http\Controllers\Api\Auth\RefreshController;
 use App\Http\Controllers\Api\PropertyStaffController;
 use App\Http\Controllers\Api\Auth\OtpVerifyController;
@@ -23,7 +24,7 @@ Route::prefix('auth')->group(function () {
 
     // Đăng ký user mới (chỉ Owner/Manager)
     Route::post('register-user', RegisterUserController::class)
-        ->middleware(['auth:sanctum', 'rbac:users.create']);
+        ->middleware(['jwt.auth', 'rbac:users.create']);
 
     // Step 1: login bằng password (tất cả role) -> tạo session PENDING_OTP + gửi OTP
     Route::post('login', LoginPasswordController::class);
@@ -37,11 +38,17 @@ Route::prefix('auth')->group(function () {
     // refresh token (chỉ cho session ACTIVE)
     Route::post('refresh', RefreshController::class);
 
-    // các route cần access_token
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::get('me', fn($r) => $r->user());
+    // Route dùng JWT authentication (token tự chứa thông tin user)
+    Route::middleware('jwt.auth')->group(function () {
+        Route::get('me', MeController::class);
         Route::post('logout', LogoutController::class);
     });
+
+    // Giữ lại route cũ với Sanctum để tương thích ngược (optional)
+    // Route::middleware('auth:sanctum')->group(function () {
+    //     Route::get('me', fn($r) => $r->user());
+    //     Route::post('logout', LogoutController::class);
+    // });
 });
 
 // Tính năng mời người dùng vào org
@@ -53,7 +60,7 @@ Route::prefix('invites')->group(function () {
     Route::post('accept', [AcceptInviteController::class, 'accept']);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('jwt.auth')->group(function () {
     Route::get('/audit-logs', [AuditLogController::class, 'index'])
         ->middleware('rbac:audit_logs.view');
 

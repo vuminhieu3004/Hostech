@@ -20,7 +20,6 @@ class LogoutController extends Controller
         // revoke access token hiện tại
         $request->user()->currentAccessToken()?->delete();
 
-        // revoke refresh theo session (nếu FE gửi session_id)
         if (!empty($data['session_id'])) {
             UserSession::where('id', $data['session_id'])
                 ->where('user_id', $user->id)

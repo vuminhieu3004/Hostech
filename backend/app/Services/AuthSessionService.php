@@ -5,12 +5,13 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\UserSession;
 use App\Services\OtpService;
+use App\Services\JwtService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AuthSessionService
 {
-    public function startOtpChallenge(User $user, array $device, string $ip, ?string $ua): array
+    public function startOtpChallenge(User $user, array $device, string $ip, ?string $ua, ?string $loginMethod = null): array
     {
         $sessionId = (string) Str::uuid();
 
@@ -48,8 +49,17 @@ class AuthSessionService
             'otp_attempts' => 0,
         ]);
 
-        // Gửi OTP qua Email hoặc SMS (ưu tiên phone)
-        $method = $otpSvc->send($user->email, $user->phone, $otp);
+        // Gửi OTP theo phương thức đăng nhập
+        if ($loginMethod === 'phone' && $user->phone) {
+            $otpSvc->sendSms($user->phone, $otp);
+            $method = 'sms';
+        } elseif ($loginMethod === 'email' && $user->email) {
+            $otpSvc->sendEmail($user->email, $otp);
+            $method = 'email';
+        } else {
+            // Fallback: ưu tiên email nếu không rõ login method
+            $method = $otpSvc->send($user->email, $user->phone, $otp);
+        }
 
         $res = [
             'session_id' => $sessionId,
@@ -149,10 +159,12 @@ class AuthSessionService
         }
 
         $refreshTtlDays = (int) env('REFRESH_TTL_DAYS', 30);
+        $accessTtlMinutes = (int) env('JWT_TTL_MINUTES', 60);
 
-        // access token (Sanctum) theo session hiện tại
-        $tokenName = "session:{$session->id}";
-        $plainAccessToken = $user->createToken($tokenName)->plainTextToken;
+        // Tạo JWT access token chứa thông tin user
+        /** @var JwtService $jwtSvc */
+        $jwtSvc = resolve(JwtService::class);
+        $plainAccessToken = $jwtSvc->createAccessToken($user, $session->id, $accessTtlMinutes);
 
         // refresh token
         $plainRefresh = Str::random(64);
@@ -191,9 +203,12 @@ class AuthSessionService
             throw new \RuntimeException('REFRESH_EXPIRED_OR_REVOKED');
         }
 
-        // rotate access token: xóa token cũ theo name session:<id>
-        $user->tokens()->where('name', "session:{$session->id}")->delete();
-        $plainAccessToken = $user->createToken("session:{$session->id}")->plainTextToken;
+        $accessTtlMinutes = (int) env('JWT_TTL_MINUTES', 60);
+
+        // Tạo JWT access token mới
+        /** @var JwtService $jwtSvc */
+        $jwtSvc = resolve(JwtService::class);
+        $plainAccessToken = $jwtSvc->createAccessToken($user, $session->id, $accessTtlMinutes);
 
         // rotate refresh token
         $plainRefresh = Str::random(64);

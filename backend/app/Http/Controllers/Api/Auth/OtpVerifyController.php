@@ -16,17 +16,15 @@ class OtpVerifyController extends Controller
             'session_id' => ['required', 'uuid'],
             'otp' => ['required', 'string', 'min:4', 'max:10'],
 
-            // optional: nếu muốn đối chiếu email/phone
             'login' => ['nullable', 'string'],
         ]);
 
         // Lấy session -> suy ra org_id và user_id
         $session = UserSession::query()
-            ->with(['user:id,org_id,email,phone,is_active']) // cần relation user() trong UserSession
+            ->with(['user:id,org_id,email,phone,is_active'])
             ->where('id', $data['session_id'])
             ->firstOrFail();
 
-        // Nếu client gửi login (email/phone), đối chiếu để chắc session thuộc đúng user
         if (!empty($data['login'])) {
             $login = trim($data['login']);
             $match = ($session->user?->email === $login) || ($session->user?->phone === $login);
