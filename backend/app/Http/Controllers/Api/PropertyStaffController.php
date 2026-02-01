@@ -48,7 +48,7 @@ class PropertyStaffController extends Controller
             return response()->json(['message' => 'Cross-org forbidden'], 403);
         }
 
-        // chỉ gán STAFF/MANAGER cho property 
+        // chỉ gán STAFF/MANAGER cho property
         if (!in_array($staff->role, ['STAFF', 'MANAGER'], true)) {
             return response()->json(['message' => 'Target user must be STAFF/MANAGER'], 422);
         }

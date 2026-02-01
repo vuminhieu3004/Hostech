@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\Auth\OtpRequestController;
 use App\Http\Controllers\Api\Auth\RegisterUserController;
 use App\Http\Controllers\Api\Auth\LoginPasswordController;
 use App\Http\Controllers\Api\Auth\RegisterOwnerController;
+use App\Http\Controllers\Api\Auth\AcceptInviteController;
+use App\Http\Controllers\Api\InviteController;
 
 Route::prefix('auth')->group(function () {
 
@@ -41,9 +43,28 @@ Route::prefix('auth')->group(function () {
         Route::post('logout', LogoutController::class);
     });
 });
+
+// Tính năng mời người dùng vào org
+Route::prefix('invites')->group(function () {
+    // Verify invite code (public)
+    Route::get('verify/{code}', [AcceptInviteController::class, 'verify']);
+
+    // Accept invite and create account
+    Route::post('accept', [AcceptInviteController::class, 'accept']);
+});
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/audit-logs', [AuditLogController::class, 'index'])
         ->middleware('rbac:audit_logs.view');
+
+    // Invite management (Owner/Manager only)
+    Route::prefix('invites')->group(function () {
+        Route::get('/', [InviteController::class, 'index']); // List invites
+        Route::post('/', [InviteController::class, 'store']); // Create invite
+        Route::get('/{invite}', [InviteController::class, 'show']); // Show invite
+        Route::delete('/{invite}', [InviteController::class, 'destroy']); // Revoke invite
+        Route::post('/{invite}/resend', [InviteController::class, 'resend']); // Resend invite
+    });
 
     //Trả về danh sách tất cả nhà/khu (properties) thuộc org của người đang đăng nhập (Owner/Manager).
     Route::get('/admin/properties', [AdminLookupController::class, 'properties'])

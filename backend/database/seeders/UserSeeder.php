@@ -14,12 +14,12 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->command->info('👥 Tạo Users cho mỗi Organization...');
+        $this->command->info(' Tạo Users cho mỗi Organization...');
 
         $orgs = Org::all();
 
         foreach ($orgs as $org) {
-            $this->command->info("  📊 Org: {$org->name}");
+            $this->command->info("   Org: {$org->name}");
 
             // 1. Tạo 1 Owner
             $owner = User::factory()->owner()->create([

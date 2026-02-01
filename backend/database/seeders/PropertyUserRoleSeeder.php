@@ -15,7 +15,7 @@ class PropertyUserRoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->command->info('🔗 Gán Users vào Properties...');
+        $this->command->info(' Gán Users vào Properties...');
 
         $orgs = Org::all();
 
