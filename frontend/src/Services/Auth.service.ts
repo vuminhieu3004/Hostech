@@ -20,3 +20,5 @@ export const Login = async (data: any) => {
 export const verifyOTP = async (data: any) => {
   return Api.post("auth/otp/verify", data);
 };
+
+// Register Users
