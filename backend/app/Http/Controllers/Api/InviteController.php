@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
+//CRUD mời nhân viên, khách thuê
 class InviteController extends Controller
 {
     public function __construct(protected InviteService $inviteService) {}

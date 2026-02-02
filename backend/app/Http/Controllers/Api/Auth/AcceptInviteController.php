@@ -10,9 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * Public endpoint để accept invite (không cần auth)
- */
+// Xác thực chấp nhận lời mời
 class AcceptInviteController extends Controller
 {
     public function __construct(protected InviteService $inviteService) {}
