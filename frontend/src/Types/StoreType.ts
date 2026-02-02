@@ -1,7 +1,9 @@
 export interface IOpenTypeStore {
   open: boolean;
+  openRegister: boolean;
   eyePassword: boolean;
   setOpen: (open: boolean) => void;
+  setOpenRegister: (openRegister: boolean) => void;
   setEyePassword: (eyePassword: boolean) => void;
 }
 
