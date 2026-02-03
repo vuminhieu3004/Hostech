@@ -1,6 +1,6 @@
 import { useRoutes } from "react-router";
 import AuthPage from "./Pages/Client/Login";
-import LayoutClient from "./Layouts/Client/LayoutClient";
+import { Navigate } from "react-router";
 import LayoutAdmin from "./Layouts/Admin/LayoutAdmin";
 import Dashboard from "./Pages/Admin/Dashboard";
 import Statistical from "./Pages/Admin/Statistical";
@@ -10,13 +10,13 @@ import Floors from "./Pages/Admin/Properties/Floors";
 import Rooms from "./Pages/Admin/Properties/Rooms";
 import VerifyOTP from "./Pages/Client/VerifyOTP";
 import Notfound from "./Pages/Client/404";
-import { useMeStore } from "./Stores/AuthStore";
 
 function App() {
   const router = useRoutes([
-    { path: "/", Component: LayoutClient },
+    { path: "/", element: <Navigate to={"/auth"} replace /> },
     { path: "/auth", Component: AuthPage },
     { path: "/otp/verify", Component: VerifyOTP },
+
     {
       path: "admin",
       Component: LayoutAdmin,
@@ -29,6 +29,7 @@ function App() {
         { path: "rooms", Component: Rooms },
       ],
     },
+
     { path: "*", Component: Notfound },
   ]);
   return router;

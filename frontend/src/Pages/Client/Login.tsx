@@ -64,13 +64,13 @@ const AuthPage = () => {
   };
   return (
     <>
-      <div className="p-3 h-180">
-        <section className="flex w-full h-179">
-          <div className="w-[70%] h-179 rounded-bl-2xl rounded-tl-2xl overflow-hidden bg-blue-400">
+      <div className="p-3 max-h-170">
+        <section className="flex w-full max-h-170">
+          <div className="w-[70%] h-170 rounded-bl-2xl rounded-tl-2xl overflow-hidden bg-gradient-to-t from-blue-300 to-blue-600">
             <img
               src="/images/logo_du_an.jpg"
               alt=""
-              className="object-cover w-100 h-100 rounded-full ml-[28%] mt-[15%]"
+              className="object-cover w-100 h-100 rounded-full ml-[28%] mt-[14%]"
             />
           </div>
           <div
@@ -97,9 +97,9 @@ const AuthPage = () => {
                   </label>
                   <input
                     type="text"
-                    placeholder="email hoặc số điện thoại..."
+                    placeholder="Email hoặc số điện thoại..."
                     {...register("login", { required: true })}
-                    className="w-full border border-gray-400 rounded-[10px] focus:outline-none p-2"
+                    className="w-full border border-gray-400 rounded-[10px] focus:outline-none p-2 placeholder:text-[14px]"
                   />
                 </div>
                 <div className="relative flex flex-col w-full">
@@ -110,7 +110,7 @@ const AuthPage = () => {
                     type={eyePassword ? "text" : "password"}
                     placeholder="Nhập mật khẩu đăng nhập..."
                     {...register("password", { required: true })}
-                    className="w-full border border-gray-400 rounded-[10px] focus:outline-none p-2"
+                    className="w-full border border-gray-400 rounded-[10px] focus:outline-none p-2 placeholder:text-[14px]"
                   />
                   <div className="absolute inset-y-10 right-4">
                     {eyePassword ? (
@@ -127,7 +127,7 @@ const AuthPage = () => {
                   </div>
                 </div>
                 <div className="mt-2 flex flex-col gap-2 items-center">
-                  <button className="w-full cursor-pointer flex items-center justify-center hover:font-semibold border border-gray-300 p-2 rounded-[10px]">
+                  <button className="w-full cursor-pointer flex items-center justify-center hover:font-semibold border border-gray-300 p-2 rounded-[10px] text-[15px]">
                     Đăng nhập bằng google
                     <img
                       src="./images/Auth/gg.png"

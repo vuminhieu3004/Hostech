@@ -62,13 +62,13 @@ const VerifyOTP = () => {
   }, [time]);
 
   return (
-    <div className="p-3 h-180">
-      <section className="flex w-full h-179">
-        <div className="w-[70%] h-179 rounded-bl-2xl rounded-tl-2xl overflow-hidden bg-blue-400">
+    <div className="p-3 max-h-170">
+      <section className="flex w-full max-h-170">
+        <div className="w-[70%] h-170 rounded-bl-2xl rounded-tl-2xl overflow-hidden bg-gradient-to-t from-blue-300 to-blue-600">
           <img
             src="/images/logo_du_an.jpg"
             alt=""
-            className="object-cover w-100 h-100 rounded-full ml-[28%] mt-[15%]"
+            className="object-cover w-100 h-100 rounded-full ml-[28%] mt-[14%]"
           />
         </div>
         <div className="flex flex-col justify-center w-[30%] bg-white border rounded-tr-2xl rounded-br-2xl border-gray-300 items-start p-5">
@@ -98,7 +98,7 @@ const VerifyOTP = () => {
                   type="text"
                   placeholder="Nhập mã OTP vừa nhận..."
                   {...register("otp", { required: true })}
-                  className="w-full border border-gray-400 rounded-[10px] p-2"
+                  className="w-full border border-gray-400 rounded-[10px] p-2 focus:outline-none placeholder:text-[14px]"
                 />
               </div>
               <div className="flex justify-center items-center gap-2 mt-3">
@@ -119,11 +119,19 @@ const VerifyOTP = () => {
                   gửi lại mã
                 </button>
               </div>
-              <div className="text-center mt-5">
-                <span className="text-gray-500">
-                  xác thực mã otp của bạn: {time}
-                </span>
-              </div>
+              {time > 0 ? (
+                <div className="text-center mt-5 text-[15px]">
+                  <span className="text-gray-500">
+                    xác thực mã otp của bạn: 00:{time}
+                  </span>
+                </div>
+              ) : (
+                <div className="text-center mt-5 text-[15px]">
+                  <span className="text-gray-500">
+                    Bạn đã nhận được mã chưa?
+                  </span>
+                </div>
+              )}
             </form>
           </div>
         </div>

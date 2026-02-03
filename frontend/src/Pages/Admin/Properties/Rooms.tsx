@@ -1,5 +1,6 @@
 import { Select } from "antd";
 import { formatStatusRoom } from "../../../Constants/Helper";
+import { Plus } from "lucide-react";
 
 const Rooms = () => {
   const data = [
@@ -76,10 +77,10 @@ const Rooms = () => {
   ];
   return (
     <>
-      <div>
-        <div className="mb-5">
+      <section className="flex flex-col gap-5">
+        <div className="flex item-center justify-between border p-2 border-gray-300 rounded-[10px]">
           <div className="flex flex-col w-50 justify-center">
-            <label htmlFor="" className="pl-2 p-1 font-semibold">
+            <label htmlFor="" className="pl-2 p-1 text-[13px] font-semibold">
               Lọc theo trạng thái
             </label>
             <Select
@@ -99,7 +100,11 @@ const Rooms = () => {
               ]}
             />
           </div>
+          <div className="flex items-center h-10 mt-2 w-content pl-2 pr-2 rounded-[10px] gap-1 bg-blue-400 p-1 text-black/60 font-semibold hover:text-white hover:font-bold cursor-pointer">
+            <Plus className="w-5" /> thêm phòng
+          </div>
         </div>
+
         <section className="flex flex-wrap items-center justify-between gap-4">
           {data?.map((item, index) => (
             <div
@@ -121,7 +126,7 @@ const Rooms = () => {
             </div>
           ))}
         </section>
-      </div>
+      </section>
     </>
   );
 };

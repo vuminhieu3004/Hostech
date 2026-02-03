@@ -2,21 +2,21 @@ import { Bell, Search, UserRoundCheck } from "lucide-react";
 
 const Header = () => {
   return (
-    <div className="w-full p-4.5 border-b border-b-gray-300 shadow-sm">
+    <div className="w-full p-4 border-b border-b-gray-300 shadow-sm">
       <section className="flex items-center justify-between">
         <div className="ml-5">
           <form className="relative">
             <input
               type="text"
               placeholder="Nhập nội dung cần tìm kiếm..."
-              className="w-140 border border-gray-300 rounded-3xl p-2 focus:outline-none"
+              className="w-140 border border-gray-300 rounded-2xl p-1 pl-3 focus:outline-none"
             />
             <button
-              className="absolute inset-y-0 right-4 cursor-pointer text-blue-950"
+              className="absolute inset-y-0 right-3 cursor-pointer text-blue-950"
               type="button"
               title="Tìm kiếm"
             >
-              <Search />
+              <Search className="w-5" />
             </button>
           </form>
         </div>

@@ -1,6 +1,5 @@
-import React from "react";
 import type { TGlobalProp } from "../../Types/ReactType";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate } from "react-router";
 import { message } from "antd";
 
 const Authorization = ({

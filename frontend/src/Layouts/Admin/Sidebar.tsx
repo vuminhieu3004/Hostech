@@ -24,14 +24,7 @@ import Authorization from "../../Components/Auth/verifyLogin";
 
 const SidebarAdmin = () => {
   const { open, openRegister, setOpen, setOpenRegister } = useOpenStore();
-  const {
-    openMenu1,
-    openMenu2,
-    openMenu3,
-    setOpenMenu1,
-    setOpenMenu2,
-    setOpenMenu3,
-  } = useOpenMenu();
+  const { openMenu1, openMenu2, setOpenMenu1, setOpenMenu2 } = useOpenMenu();
   const location = useLocation();
   const [action, setAction] = useState<string>(location.pathname);
   const { me } = useMeStore();
@@ -53,7 +46,7 @@ const SidebarAdmin = () => {
             <img
               src="/images/logo_du_an.jpg"
               alt=""
-              className="w-13 h-13 rounded-full m-4 "
+              className="w-13 h-13 rounded-full m-3.5"
             />
             <p
               className={`font-semibold text-blue-900 text-2xl ${open ? "pl-2" : ""}`}
@@ -65,18 +58,18 @@ const SidebarAdmin = () => {
             {open ? (
               <PanelRightClose
                 onClick={() => setOpen(!open)}
-                className="absolute cursor-pointer text-blue-900 inset-y-9 -right-3"
+                className="absolute cursor-pointer text-blue-900 inset-y-7.5 -right-3"
               />
             ) : (
               <PanelRightOpen
                 onClick={() => setOpen(!open)}
-                className="absolute cursor-pointer text-blue-900 inset-y-9 -right-3"
+                className="absolute cursor-pointer text-blue-900 inset-y-7.5 -right-3"
               />
             )}
           </div>
         </div>
         <div>
-          <ul className="ul p-5 pt-4 flex flex-col gap-2 max-h-150 overflow-scroll">
+          <ul className="ul text-[15px] p-5 pt-4 flex flex-col gap-2 max-h-150 overflow-scroll">
             <Link
               to="/admin"
               onClick={() => setAction("/admin")}
@@ -123,7 +116,7 @@ const SidebarAdmin = () => {
                 )}
               </li>
             </Link>
-            <ul className="w-full flex flex-col gap-3  border border-gray-300 p-1 rounded-2xl shadow-sm shadow-gray-400">
+            <ul className="w-full flex text-[15px] flex-col gap-3  border border-gray-300 p-1 rounded-2xl shadow-sm shadow-gray-400">
               {open === false ? (
                 <li>
                   <div
@@ -367,20 +360,22 @@ const SidebarAdmin = () => {
                     </Link>
                   </li>
                   <li>
-                    <Authorization
-                      role={me || ""}
-                      allowRole={["OWNER", "MANAGER"]}
-                    >
-                      <Register open={openRegister}>
-                        <button
-                          className={`${openRegister ? "flex items-center gap-1 bg-blue-500 p-4 text-white font-bold text-[14px] shadow-sm shadow-gray-300 rounded-2xl" : "flex items-center gap-1 p-4 text-[15px] cursor-pointer hover:bg-blue-300 rounded-2xl hover:text-white"}`}
-                          onClick={() => setOpenRegister(true)}
-                        >
-                          <UserPen />
-                          Thêm người thuê
-                        </button>
-                      </Register>
-                    </Authorization>
+                    {me && (
+                      <Authorization
+                        role={me || ""}
+                        allowRole={["OWNER", "MANAGER"]}
+                      >
+                        <Register open={openRegister}>
+                          <button
+                            className={`${openRegister ? "flex items-center gap-1 bg-blue-500 p-4 text-white font-bold text-[14px] shadow-sm shadow-gray-300 rounded-2xl" : "flex items-center gap-1 p-4 text-[15px] cursor-pointer hover:bg-blue-300 rounded-2xl hover:text-white"}`}
+                            onClick={() => setOpenRegister(true)}
+                          >
+                            <UserPen />
+                            Thêm người thuê
+                          </button>
+                        </Register>
+                      </Authorization>
+                    )}
                   </li>
                 </ul>
               )}
