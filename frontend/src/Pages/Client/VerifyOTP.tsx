@@ -77,7 +77,7 @@ const VerifyOTP = () => {
               Welcome to Hostech
             </h2>
           </div>
-          <div className="flex flex-col justify-center w-full bg-white border shadow-2xl shadow-blue-500 rounded-[10px] items-start p-10">
+          <div className="flex flex-col justify-center w-full bg-white border border-gray-300  shadow-2xl shadow-blue-500 rounded-[10px] items-start p-10">
             <h2 className="w-full text-center text-2xl font-semibold pb-5">
               Xác thực OTP
             </h2>
