@@ -1,18 +1,18 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router";
 import { message } from "antd";
-import Api from "../../Api/Api";
-import type { IDecodeJWT, IOtpVerify } from "../../Types/Auth.Type";
-import { verifyOTP } from "../../Services/Auth.service";
-import { jwtDecode } from "jwt-decode";
+import type { IOtpVerify } from "../../Types/Auth.Type";
+import { ResendOTP, verifyOTP } from "../../Services/Auth.service";
 
 const VerifyOTP = () => {
   const { register, handleSubmit } = useForm<IOtpVerify>();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { session_id, org_id, dev_otp } = location.state || {};
+  const [time, setTime] = useState<number>(60);
+
+  const { session_id, org_id } = location.state || {};
 
   if (!session_id || !org_id) {
     message.error("Phiên xác thực không hợp lệ, vui lòng đăng nhập lại");
@@ -27,8 +27,7 @@ const VerifyOTP = () => {
         org_id,
         otp: data.otp,
       });
-
-      message.success("Xác thực OTP thành công");
+      -message.success("Xác thực OTP thành công");
 
       localStorage.setItem("Token", res.data.access_token);
 
@@ -37,6 +36,30 @@ const VerifyOTP = () => {
       message.error(err?.response?.data?.message || "OTP không hợp lệ");
     }
   };
+
+  const handleResendOTP = async () => {
+    try {
+      const res = await ResendOTP({ org_id, session_id });
+      message.success(res.data.message);
+
+      // chỉ dùng khi local/dev
+      if (res.data?.dev_otp) {
+        console.log("DEV OTP:", res.data.dev_otp);
+      }
+    } catch (err: any) {
+      message.error(err?.response?.data?.message || "Không thể gửi lại OTP");
+    }
+  };
+
+  useEffect(() => {
+    if (time === 0) return;
+
+    const timer = setTimeout(() => {
+      setTime(time - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [time]);
 
   return (
     <div className="p-3 h-180">
@@ -59,11 +82,11 @@ const VerifyOTP = () => {
               Xác thực OTP
             </h2>
 
-            {dev_otp && (
+            {/* {dev_otp && (
               <p className="text-sm text-gray-500 mb-2">
                 OTP dev: <b>{dev_otp}</b>
               </p>
-            )}
+            )} */}
 
             <form
               onSubmit={handleSubmit(handleOTP)}
@@ -78,13 +101,28 @@ const VerifyOTP = () => {
                   className="w-full border border-gray-400 rounded-[10px] p-2"
                 />
               </div>
-              <div className="flex flex-col items-center gap-2 mt-3">
+              <div className="flex justify-center items-center gap-2 mt-3">
                 <button
                   type="submit"
                   className="w-35 p-2 bg-red-500 rounded-[10px] text-white hover:bg-red-600 cursor-pointer"
                 >
                   Xác nhận
                 </button>
+                <button
+                  type="submit"
+                  onClick={() => {
+                    handleResendOTP();
+                    setTime(60);
+                  }}
+                  className="w-35 p-2 border border-gray-300 rounded-[10px] hover:bg-gray-200 cursor-pointer"
+                >
+                  gửi lại mã
+                </button>
+              </div>
+              <div className="text-center mt-5">
+                <span className="text-gray-500">
+                  xác thực mã otp của bạn: {time}
+                </span>
               </div>
             </form>
           </div>

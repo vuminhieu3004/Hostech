@@ -10,6 +10,7 @@ import Floors from "./Pages/Admin/Properties/Floors";
 import Rooms from "./Pages/Admin/Properties/Rooms";
 import VerifyOTP from "./Pages/Client/VerifyOTP";
 import Notfound from "./Pages/Client/404";
+import { useMeStore } from "./Stores/AuthStore";
 
 function App() {
   const router = useRoutes([
