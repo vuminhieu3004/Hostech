@@ -19,6 +19,8 @@ import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import Register from "../../Components/Auth/Register";
+import { useMeStore } from "../../Stores/AuthStore";
+import Authorization from "../../Components/Auth/verifyLogin";
 
 const SidebarAdmin = () => {
   const { open, openRegister, setOpen, setOpenRegister } = useOpenStore();
@@ -32,6 +34,7 @@ const SidebarAdmin = () => {
   } = useOpenMenu();
   const location = useLocation();
   const [action, setAction] = useState<string>(location.pathname);
+  const { me } = useMeStore();
 
   useEffect(() => {
     if (openRegister) {
@@ -364,15 +367,20 @@ const SidebarAdmin = () => {
                     </Link>
                   </li>
                   <li>
-                    <Register open={openRegister}>
-                      <button
-                        className={`${openRegister ? "flex items-center gap-1 bg-blue-500 p-4 text-white font-bold text-[14px] shadow-sm shadow-gray-300 rounded-2xl" : "flex items-center gap-1 p-4 text-[15px] cursor-pointer hover:bg-blue-300 rounded-2xl hover:text-white"}`}
-                        onClick={() => setOpenRegister(true)}
-                      >
-                        <UserPen />
-                        Thêm người thuê
-                      </button>
-                    </Register>
+                    <Authorization
+                      role={me || ""}
+                      allowRole={["OWNER", "MANAGER"]}
+                    >
+                      <Register open={openRegister}>
+                        <button
+                          className={`${openRegister ? "flex items-center gap-1 bg-blue-500 p-4 text-white font-bold text-[14px] shadow-sm shadow-gray-300 rounded-2xl" : "flex items-center gap-1 p-4 text-[15px] cursor-pointer hover:bg-blue-300 rounded-2xl hover:text-white"}`}
+                          onClick={() => setOpenRegister(true)}
+                        >
+                          <UserPen />
+                          Thêm người thuê
+                        </button>
+                      </Register>
+                    </Authorization>
                   </li>
                 </ul>
               )}

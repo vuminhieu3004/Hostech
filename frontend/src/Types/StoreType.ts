@@ -1,3 +1,5 @@
+import type { IMe } from "./Auth.Type";
+
 export interface IOpenTypeStore {
   open: boolean;
   openRegister: boolean;
@@ -21,4 +23,9 @@ export interface IOpenMenu {
   setOpenMenu1: (openMenu1: boolean) => void;
   setOpenMenu2: (openMenu2: boolean) => void;
   setOpenMenu3: (openMenu3: boolean) => void;
+}
+
+export interface IMeStore {
+  me: string;
+  getMe: (me: string) => Promise<void>;
 }

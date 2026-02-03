@@ -2,8 +2,10 @@ import React, { useEffect, useState, type ReactElement } from "react";
 import { useOpenStore } from "../../Stores/OpenStore";
 import { Eye, EyeClosed } from "lucide-react";
 import type { TGlobalProp } from "../../Types/ReactType";
+import { useMeStore } from "../../Stores/AuthStore";
 
 const Register = ({ children }: TGlobalProp<{ open: boolean }>) => {
+  const { me } = useMeStore();
   const { openRegister, eyePassword, setOpenRegister, setEyePassword } =
     useOpenStore();
 

@@ -19,3 +19,11 @@ export interface IDecodeJWT {
   id: number;
   role: string;
 }
+
+export interface IMe {
+  full_name: string;
+  org_id: string;
+  role: string;
+  phone: string;
+  email: string;
+}
