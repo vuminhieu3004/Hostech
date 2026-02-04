@@ -18,7 +18,7 @@ class PropertyController extends Controller
     {
         $scopedPropertyIds = $request->input('_scoped_property_ids', []);
 
-        // If no scoped properties, return empty
+        // nếu ko có bds nào trong phạm vi truy cập trả veef rỗng
         if (empty($scopedPropertyIds)) {
             return response()->json([
                 'success' => true,
@@ -34,7 +34,6 @@ class PropertyController extends Controller
             ->whereIn('id', $scopedPropertyIds)
             ->where('org_id', $request->user()->org_id);
 
-        // Apply filters
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
@@ -118,14 +117,11 @@ class PropertyController extends Controller
         ], 201);
     }
 
-    /**
-     * Display the specified property.
-     */
+
     public function show(Request $request, Property $property)
     {
         $scopedPropertyIds = $request->input('_scoped_property_ids', []);
 
-        // Check if user has access to this property
         if (!in_array($property->id, $scopedPropertyIds)) {
             return response()->json([
                 'success' => false,
@@ -133,7 +129,6 @@ class PropertyController extends Controller
             ], 404);
         }
 
-        // Double-check org ownership
         if ($property->org_id !== $request->user()->org_id) {
             return response()->json([
                 'success' => false,
@@ -146,15 +141,10 @@ class PropertyController extends Controller
             'data' => $property
         ]);
     }
-
-    /**
-     * Update the specified property.
-     */
     public function update(Request $request, Property $property)
     {
         $scopedPropertyIds = $request->input('_scoped_property_ids', []);
 
-        // Check if user has access to this property
         if (!in_array($property->id, $scopedPropertyIds)) {
             return response()->json([
                 'success' => false,
@@ -162,7 +152,7 @@ class PropertyController extends Controller
             ], 404);
         }
 
-        // Double-check org ownership
+        //check lại org ownership
         if ($property->org_id !== $request->user()->org_id) {
             return response()->json([
                 'success' => false,
@@ -223,22 +213,17 @@ class PropertyController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified property.
-     */
     public function destroy(Request $request, Property $property)
     {
         $scopedPropertyIds = $request->input('_scoped_property_ids', []);
 
-        // Check if user has access to this property
+        //check nếu ko có quyền truy cập
         if (!in_array($property->id, $scopedPropertyIds)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Không tìm thấy bất động sản hoặc không có quyền truy cập'
             ], 404);
         }
-
-        // Double-check org ownership
         if ($property->org_id !== $request->user()->org_id) {
             return response()->json([
                 'success' => false,

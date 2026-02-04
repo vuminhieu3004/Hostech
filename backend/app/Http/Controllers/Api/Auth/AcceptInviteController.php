@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
+use function Psy\debug;
+
 // Xác thực chấp nhận lời mời
 class AcceptInviteController extends Controller
 {
@@ -23,7 +25,7 @@ class AcceptInviteController extends Controller
         $data = $request->validate([
             'org_id' => ['required', 'uuid'],
         ]);
-
+        // debug($data);
         $invite = $this->inviteService->validate($code, $data['org_id']);
 
         if (!$invite) {
