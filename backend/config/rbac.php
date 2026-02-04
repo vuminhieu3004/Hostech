@@ -9,15 +9,14 @@ $modules = [
     'audit_logs' => ['view'],
     'users'      => $CRUD,
 
-    // property-level
+    // property-level - Quản lý nhà/khu/phòng
     'properties' => $CRUD,
     'rooms'      => $CRUD,
+    'room_prices' => $CRUD, // Quản lý giá phòng & price history
+
 ];
 
 $custom = [
-    // nghiệp vụ
-    'contracts.terminate',
-
     // CRUD phân chia nhà/khu cho staff/manager (org-level)
     'properties.staff.view',
     'properties.staff.assign',
@@ -44,7 +43,7 @@ $scopes = [
     // property-level dữ liệu nghiệp vụ
     'properties.*' => 'property',
     'rooms.*'      => 'property',
-    'contracts.*'  => 'property',
+
 ];
 
 return [
@@ -63,13 +62,13 @@ return [
     'roles' => [
         'Owner' => ['*'],
 
+        //Các tính năng cho phép manager đc làm
         'Manager' => [
             'audit_logs.view',
             'properties.*',
             'rooms.*',
             'contracts.terminate',
 
-            // cho phép Manager quản lý việc gán nhà/khu
             'properties.staff.view',
             'properties.staff.assign',
             'properties.staff.revoke',

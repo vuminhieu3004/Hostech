@@ -36,6 +36,7 @@ class User extends Authenticatable
         'mfa_method',
         'mfa_secret_encrypted',
         'mfa_enrolled_at',
+        'otp_required',
         'is_active',
         'deleted_at',
         'meta',
@@ -52,10 +53,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'mfa_enabled' => 'boolean',
         'mfa_enrolled_at' => 'datetime',
+        'otp_required' => 'boolean',
         'meta' => 'array',
     ];
 
-    // Laravel Auth sẽ lấy password từ đây
+    //laravel auth dùng hàm này để lấy password
     public function getAuthPassword(): string
     {
         return (string) $this->password_hash;

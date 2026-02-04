@@ -113,6 +113,32 @@ class LoginPasswordController extends Controller
         $user->locked_until = null;
         $user->save();
 
+        // Kiểm tra OTP của user (default: true nếu chưa set)
+        $userOtpRequired = $user->otp_required ?? true;
+
+        // Skip OTP nếu user tắt OTP
+        if (!$userOtpRequired) {
+            $tokens = $auth->skipOtpAndLogin($user, [
+                'device_id' => $data['device_id'] ?? null,
+                'device_name' => $data['device_name'] ?? 'web',
+                'device_platform' => $data['device_platform'] ?? 'Web',
+                'device_fingerprint' => $data['device_fingerprint'] ?? null,
+            ], $request->ip(), $request->userAgent());
+
+            AuditLogger::log($orgId, $user->id, 'AUTH_LOGIN_PASSWORD_OK_NO_OTP', 'user_sessions', $tokens['session_id'], [
+                'session_id' => $tokens['session_id'],
+            ], $request);
+
+            return response()->json([
+                'message' => 'Đăng nhập thành công.',
+                'org_id' => $orgId,
+                'session_id' => $tokens['session_id'],
+                'access_token' => $tokens['access_token'],
+                'refresh_token' => $tokens['refresh_token'],
+                'refresh_expires_at' => $tokens['expires_at'],
+            ]);
+        }
+
         // 4) Start OTP challenge (gửi OTP theo phương thức đăng nhập)
         $challenge = $auth->startOtpChallenge($user, [
             'device_id' => $data['device_id'] ?? null,
