@@ -55,18 +55,23 @@ class AuthenticateJwt
                 $session->save();
             }
 
-            // Inject user vào request (dạng object từ token)
-            // Frontend có thể lấy trực tiếp từ token hoặc từ response này
+            // Inject user vào request (convert token object to array to avoid InputBag errors)
+            $authUserValue = is_object($userFromToken) ? (array) $userFromToken : $userFromToken;
+
             $request->merge([
-                'auth_user' => $userFromToken,
-                'auth_user_id' => $userFromToken->id,
-                'auth_org_id' => $userFromToken->org_id,
+                'auth_user' => $authUserValue,
+                'auth_user_id' => $userFromToken->id ?? null,
+                'auth_org_id' => $userFromToken->org_id ?? null,
                 'auth_session_id' => $sessionId,
             ]);
 
-            // Set auth user để dùng auth()->user() (nếu cần)
             // Tạo User model instance từ data trong token (không load từ DB)
-            $userModel = new User((array) $userFromToken);
+            $userArray = (array) $userFromToken;
+            $userId = $userArray['id'] ?? null;
+            unset($userArray['id']); // Remove id from attributes
+
+            $userModel = new User($userArray);
+            $userModel->id = $userId; // Set primary key explicitly
             $userModel->exists = true;
             $request->setUserResolver(fn() => $userModel);
         } catch (\Exception $e) {

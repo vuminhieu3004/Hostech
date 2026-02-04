@@ -40,8 +40,15 @@ $scopes = [
     'properties.staff.assign' => 'org',
     'properties.staff.revoke' => 'org',
 
-    // property-level dữ liệu nghiệp vụ
-    'properties.*' => 'property',
+    // properties.create là org-level (tạo mới property)
+    'properties.create' => 'org',
+    'properties.view'   => 'org', // Danh sách properties thuộc org
+
+    // property-level cho update/delete cụ thể
+    'properties.update' => 'property',
+    'properties.delete' => 'property',
+
+    // property-level dữ liệu phòng
     'rooms.*'      => 'property',
 
 ];

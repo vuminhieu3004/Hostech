@@ -37,6 +37,11 @@ class Property extends Model
         return $this->belongsTo(Org::class, 'org_id');
     }
 
+    public function rooms()
+    {
+        return $this->hasMany(Room::class, 'property_id');
+    }
+
     public function propertyUserRoles()
     {
         return $this->hasMany(PropertyUserRole::class, 'property_id');
