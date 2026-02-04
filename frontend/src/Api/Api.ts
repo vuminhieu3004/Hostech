@@ -1,12 +1,19 @@
 import axios from "axios";
+import { useTokenStore } from "../Stores/AuthStore";
 
-const token = localStorage.getItem("access_token");
 const Api = axios.create({
   baseURL: "http://127.0.0.1:8000/api/",
   headers: {
-    Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
   },
+});
+
+Api.interceptors.request.use((config) => {
+  const token = useTokenStore.getState().getToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export default Api;

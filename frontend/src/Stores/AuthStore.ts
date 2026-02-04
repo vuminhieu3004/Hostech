@@ -1,14 +1,37 @@
 import { create } from "zustand";
-import type { IMeStore } from "../Types/StoreType";
-import { GetMe } from "../Services/Auth.service";
-import type { IMe } from "../Types/Auth.Type";
+import type { ITokenStore } from "../Types/StoreType";
+import type { IDecodeJWT } from "../Types/Auth.Type";
+import { jwtDecode } from "jwt-decode";
 
-export const useMeStore = create<IMeStore>((set) => ({
-  me: "",
+export const useTokenStore = create<ITokenStore>((set, get) => ({
+  token: localStorage.getItem("token") || "",
+  role: null,
 
-  getMe: async () => {
-    const { data } = await GetMe();
-    console.log(data.role);
-    set({ me: data.role });
+  setToken: (token: string) => {
+    localStorage.setItem("token", token);
+
+    try {
+      const decoded = jwtDecode<IDecodeJWT>(token);
+
+      set({
+        token,
+        role: decoded.user.role ?? null,
+      });
+    } catch (error) {
+      set({ token: "", role: null });
+    }
+  },
+
+  getRole: () => {
+    return get().role;
+  },
+
+  getToken: () => {
+    return get().token;
+  },
+
+  clearToken: () => {
+    localStorage.removeItem("token");
+    set({ token: "", role: null });
   },
 }));

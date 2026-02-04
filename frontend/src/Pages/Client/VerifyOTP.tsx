@@ -2,17 +2,20 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router";
 import { message } from "antd";
-import type { IOtpVerify } from "../../Types/Auth.Type";
+import type { IDecodeJWT, IOtpVerify } from "../../Types/Auth.Type";
 import { ResendOTP, verifyOTP } from "../../Services/Auth.service";
+import { jwtDecode } from "jwt-decode";
+import { useTokenStore } from "../../Stores/AuthStore";
 
 const VerifyOTP = () => {
+  const setToken = useTokenStore((state) => state.setToken);
   const { register, handleSubmit } = useForm<IOtpVerify>();
   const location = useLocation();
   const navigate = useNavigate();
 
   const [time, setTime] = useState<number>(60);
 
-  const { session_id, org_id } = location.state || {};
+  const { session_id, org_id, dev_otp } = location.state || {};
 
   if (!session_id || !org_id) {
     message.error("Phiên xác thực không hợp lệ, vui lòng đăng nhập lại");
@@ -27,13 +30,24 @@ const VerifyOTP = () => {
         org_id,
         otp: data.otp,
       });
-      -message.success("Xác thực OTP thành công");
 
-      localStorage.setItem("Token", res.data.access_token);
+      setToken(res.data.access_token);
 
+      // Giải mã token để lấy role
+      const decoded = jwtDecode<IDecodeJWT>(res.data.access_token);
+      console.log("role", decoded.user.role);
+
+      message.success("Xác thực OTP thành công");
       navigate("/admin");
     } catch (err: any) {
-      message.error(err?.response?.data?.message || "OTP không hợp lệ");
+      console.error(err);
+
+      // phân biệt lỗi
+      if (err?.response?.status === 401) {
+        message.error("Phiên đăng nhập không hợp lệ hoặc token lỗi");
+      } else {
+        message.error(err?.response?.data?.message || "OTP không hợp lệ");
+      }
     }
   };
 
@@ -82,11 +96,11 @@ const VerifyOTP = () => {
               Xác thực OTP
             </h2>
 
-            {/* {dev_otp && (
+            {dev_otp && (
               <p className="text-sm text-gray-500 mb-2">
                 OTP dev: <b>{dev_otp}</b>
               </p>
-            )} */}
+            )}
 
             <form
               onSubmit={handleSubmit(handleOTP)}

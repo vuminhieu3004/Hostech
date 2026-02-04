@@ -19,15 +19,15 @@ import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import Register from "../../Components/Auth/Register";
-import { useMeStore } from "../../Stores/AuthStore";
 import Authorization from "../../Components/Auth/verifyLogin";
+import { useTokenStore } from "../../Stores/AuthStore";
 
 const SidebarAdmin = () => {
   const { open, openRegister, setOpen, setOpenRegister } = useOpenStore();
   const { openMenu1, openMenu2, setOpenMenu1, setOpenMenu2 } = useOpenMenu();
   const location = useLocation();
   const [action, setAction] = useState<string>(location.pathname);
-  const { me } = useMeStore();
+  const role = useTokenStore((state) => state.role);
 
   useEffect(() => {
     if (openRegister) {
@@ -360,9 +360,9 @@ const SidebarAdmin = () => {
                     </Link>
                   </li>
                   <li>
-                    {me && (
+                    {role && (
                       <Authorization
-                        role={me || ""}
+                        role={role || ""}
                         allowRole={["OWNER", "MANAGER"]}
                       >
                         <Register open={openRegister}>

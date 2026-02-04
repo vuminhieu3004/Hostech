@@ -16,8 +16,25 @@ export interface IOtpVerify {
 }
 
 export interface IDecodeJWT {
-  id: number;
-  role: string;
+  iss: string;
+  iat: number;
+  exp: number;
+  sub: string;
+  user: {
+    id: string;
+    org_id: string;
+    email: string;
+    phone: string;
+    name: string;
+    is_active: boolean;
+    role: string; // Role cấp org
+  };
+  property_roles: Array<{
+    property_id: string;
+    role: string;
+    permissions: string[];
+  }>;
+  session_id: string;
 }
 
 export interface IMe {

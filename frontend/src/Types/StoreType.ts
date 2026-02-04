@@ -25,7 +25,11 @@ export interface IOpenMenu {
   setOpenMenu3: (openMenu3: boolean) => void;
 }
 
-export interface IMeStore {
-  me: string;
-  getMe: (me: string) => Promise<void>;
+export interface ITokenStore {
+  token: string;
+  role: string | null;
+  setToken: (token: string) => void;
+  getRole: () => string | null;
+  getToken: () => string | null;
+  clearToken: () => void;
 }
