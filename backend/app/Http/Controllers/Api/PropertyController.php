@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Property;
+use App\Models\PropertyUserRole;
 use App\Services\AuditLogger;
+use App\Services\PropertyAccess\PropertyAccessService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -109,6 +111,9 @@ class PropertyController extends Controller
             ['property' => $property->toArray()],
             $request
         );
+
+        // Clear cache để property mới xuất hiện trong scope ngay lập tức
+        app(PropertyAccessService::class)->clearUser($request->user());
 
         return response()->json([
             'success' => true,
@@ -232,6 +237,21 @@ class PropertyController extends Controller
         }
 
         $propertyData = $property->toArray();
+
+        // 1. Soft delete tất cả rooms thuộc property này
+        $property->rooms()->delete();
+
+        // 2. Vô hiệu hóa tất cả PropertyUserRole assignments
+        //    (Không xóa để giữ lịch sử, chỉ set is_active = false)
+        $affectedUserIds = PropertyUserRole::where('property_id', $property->id)
+            ->where('is_active', true)
+            ->pluck('user_id')
+            ->toArray();
+
+        PropertyUserRole::where('property_id', $property->id)
+            ->update(['is_active' => false]);
+
+        // 3. Soft delete property
         $property->delete();
 
         AuditLogger::log(
@@ -243,6 +263,16 @@ class PropertyController extends Controller
             ['property' => $propertyData],
             $request
         );
+
+        // 4. Clear cache của user hiện tại
+        app(PropertyAccessService::class)->clearUser($request->user());
+
+        // 5. Clear cache của tất cả Manager/Staff bị ảnh hưởng
+        $propertyAccessService = app(PropertyAccessService::class);
+        foreach ($affectedUserIds as $userId) {
+            // Clear cache bằng user_id trực tiếp
+            $propertyAccessService->clearUser($userId);
+        }
 
         return response()->json([
             'success' => true,
