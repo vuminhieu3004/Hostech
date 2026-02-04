@@ -26,7 +26,7 @@ class OtpRequestController extends Controller
             'message' => 'Đã gửi lại OTP.',
             'session_id' => $res['session_id'],
             'otp_ttl' => $res['otp_ttl'],
-            'dev_otp' => $res['dev_otp'] ?? null, // chỉ local
+            'dev_otp' => $res['dev_otp'] ?? null,
         ]);
     }
 }
