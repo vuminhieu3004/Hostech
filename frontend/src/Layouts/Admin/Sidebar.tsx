@@ -58,12 +58,12 @@ const SidebarAdmin = () => {
             {open ? (
               <PanelRightClose
                 onClick={() => setOpen(!open)}
-                className="absolute cursor-pointer text-blue-900 inset-y-7.5 -right-3"
+                className="absolute cursor-pointer text-blue-900 inset-y-7.5 -right-3 hover:text-blue-700"
               />
             ) : (
               <PanelRightOpen
                 onClick={() => setOpen(!open)}
-                className="absolute cursor-pointer text-blue-900 inset-y-7.5 -right-3"
+                className="absolute cursor-pointer text-blue-900 inset-y-7.5 -right-3 hover:text-blue-700"
               />
             )}
           </div>
@@ -366,13 +366,22 @@ const SidebarAdmin = () => {
                         allowRole={["OWNER", "MANAGER"]}
                       >
                         <Register open={openRegister}>
-                          <button
-                            className={`${openRegister ? "flex items-center gap-1 bg-blue-500 p-4 text-white font-bold text-[14px] shadow-sm shadow-gray-300 rounded-2xl" : "flex items-center gap-1 p-4 text-[15px] cursor-pointer hover:bg-blue-300 rounded-2xl hover:text-white"}`}
-                            onClick={() => setOpenRegister(true)}
-                          >
-                            <UserPen />
-                            Thêm người thuê
-                          </button>
+                          {open ? (
+                            <button
+                              className={`${openRegister ? "flex items-center gap-1 bg-blue-500 p-4 text-white font-bold text-[14px] shadow-sm shadow-gray-300 rounded-2xl" : "flex items-center gap-1 p-4 text-[15px] cursor-pointer hover:bg-blue-300 rounded-2xl hover:text-white"}`}
+                              onClick={() => setOpenRegister(true)}
+                            >
+                              <UserPen />
+                            </button>
+                          ) : (
+                            <button
+                              className={`${openRegister ? "flex items-center gap-1 bg-blue-500 p-4 text-white font-bold text-[14px] shadow-sm shadow-gray-300 rounded-2xl" : "flex items-center gap-1 p-4 text-[15px] cursor-pointer hover:bg-blue-300 rounded-2xl hover:text-white"}`}
+                              onClick={() => setOpenRegister(true)}
+                            >
+                              <UserPen />
+                              Thêm người thuê
+                            </button>
+                          )}
                         </Register>
                       </Authorization>
                     )}

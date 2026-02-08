@@ -1,6 +1,22 @@
-import { Bell, Search, UserRoundCheck } from "lucide-react";
+import { Bell, Search, UserRoundCheck, LogOut } from "lucide-react";
+import ModalSetting from "../../Components/Auth/ModalSetting";
+import { useOpenStore } from "../../Stores/OpenStore";
+import { useUserInfo } from "../../Hooks/useUserInfo";
+import { useTokenStore } from "../../Stores/AuthStore";
+import { useNavigate } from "react-router";
 
 const Header = () => {
+  const { openModalSetting, setOpenModalSetting } = useOpenStore();
+  const { user, isLoading } = useUserInfo();
+  const clearToken = useTokenStore((state) => state.clearToken);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    clearToken();
+    setOpenModalSetting(false);
+    navigate("/auth");
+  };
+
   return (
     <div className="w-full p-4 border-b border-b-gray-300 shadow-sm">
       <section className="flex items-center justify-between">
@@ -21,15 +37,20 @@ const Header = () => {
           </form>
         </div>
         <div className="relative flex items-center gap-3 mr-5">
-          <p className="w-12 h-12 border border-gray-300 rounded-full p-3 cursor-pointer">
+          <p className="w-12 h-12 border border-gray-300 rounded-full p-3 cursor-pointer hover:bg-gray-100">
             <Bell />
           </p>
-          <p className="absolute -inset-y-1 right-15 w-5 h-5 bg-red-500 rounded-full text-center leading-5 text-white font-semibold">
+          <p className="absolute -inset-y-1 right-15 w-5 h-5 bg-red-500 rounded-full text-center leading-5 text-white font-semibold text-xs">
             1
           </p>
-          <p className="w-12 h-12 border border-gray-300 rounded-full p-3 cursor-pointer">
-            <UserRoundCheck />
-          </p>
+          <ModalSetting open={openModalSetting}>
+            <p
+              className="w-12 h-12 border border-gray-300 rounded-full p-3 cursor-pointer hover:bg-gray-100 flex items-center justify-center"
+              title={user?.full_name || "Người dùng"}
+            >
+              <UserRoundCheck />
+            </p>
+          </ModalSetting>
         </div>
       </section>
     </div>
