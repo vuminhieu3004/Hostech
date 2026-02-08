@@ -28,7 +28,9 @@ export interface IOpenMenu {
 export interface ITokenStore {
   token: string;
   role: string | null;
+  isLoading: boolean;
   setToken: (token: string) => void;
+  restoreToken: () => void;
   getRole: () => string | null;
   getToken: () => string | null;
   clearToken: () => void;

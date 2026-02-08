@@ -1,4 +1,5 @@
 import { useRoutes } from "react-router";
+import { useEffect } from "react";
 import AuthPage from "./Pages/Client/Login";
 import { Navigate } from "react-router";
 import LayoutAdmin from "./Layouts/Admin/LayoutAdmin";
@@ -10,8 +11,20 @@ import Floors from "./Pages/Admin/Properties/Floors";
 import Rooms from "./Pages/Admin/Properties/Rooms";
 import VerifyOTP from "./Pages/Client/VerifyOTP";
 import Notfound from "./Pages/Client/404";
+import { useTokenStore } from "./Stores/AuthStore";
 
 function App() {
+  const restoreToken = useTokenStore((state) => state.restoreToken);
+  const isLoading = useTokenStore((state) => state.isLoading);
+
+  useEffect(() => {
+    restoreToken();
+  }, []);
+
+  if (isLoading) {
+    return <div>Đang tải...</div>;
+  }
+
   const router = useRoutes([
     { path: "/", element: <Navigate to={"/auth"} replace /> },
     { path: "/auth", Component: AuthPage },
