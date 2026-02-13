@@ -13,6 +13,7 @@ import {
   UserRoundCog,
   Users,
   Warehouse,
+  Zap,
 } from "lucide-react";
 import { useOpenMenu, useOpenStore } from "../../Stores/OpenStore";
 import { Link } from "react-router";
@@ -36,9 +37,8 @@ const SidebarAdmin = () => {
   }, [location.pathname, openRegister]);
   return (
     <div
-      className={`h-auto duration-500 ease-in-out shadow ${
-        open ? "w-[6%]" : "w-[20%]"
-      }`}
+      className={`h-auto duration-500 ease-in-out shadow ${open ? "w-[6%]" : "w-[20%]"
+        }`}
     >
       <section className="relative">
         <div className="border-b border-gray-300 shadow-sm">
@@ -73,11 +73,10 @@ const SidebarAdmin = () => {
             <Link
               to="/admin"
               onClick={() => setAction("/admin")}
-              className={`${
-                action == "/admin"
-                  ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                  : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-              }`}
+              className={`${action == "/admin"
+                ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                }`}
             >
               {" "}
               <li className="flex items-center gap-2">
@@ -96,11 +95,10 @@ const SidebarAdmin = () => {
             <Link
               to="/admin/statistical"
               onClick={() => setAction("/admin/statistical")}
-              className={`${
-                action == "/admin/statistical"
-                  ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                  : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-              }`}
+              className={`${action == "/admin/statistical"
+                ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                }`}
             >
               {" "}
               <li className="flex items-center gap-2">
@@ -112,6 +110,28 @@ const SidebarAdmin = () => {
                   <>
                     <ChartSpline />
                     Thống kê
+                  </>
+                )}
+              </li>
+            </Link>
+            <Link
+              to="/admin/services"
+              onClick={() => setAction("/admin/services")}
+              className={`${action == "/admin/services"
+                  ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                  : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                }`}
+            >
+              {" "}
+              <li className="flex items-center gap-2">
+                {open ? (
+                  <span title="Dịch vụ">
+                    <Zap className="pr-1" />
+                  </span>
+                ) : (
+                  <>
+                    <Zap />
+                    Dịch vụ
                   </>
                 )}
               </li>
@@ -141,9 +161,8 @@ const SidebarAdmin = () => {
               )}
               {openMenu1 && (
                 <ul
-                  className={`flex flex-col justify-center gap-1 border p-2 pl-3.5 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${
-                    open == true ? "items-center" : ""
-                  }`}
+                  className={`flex flex-col justify-center gap-1 border p-2 pl-3.5 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${open == true ? "items-center" : ""
+                    }`}
                 >
                   <li>
                     <Link
@@ -152,11 +171,10 @@ const SidebarAdmin = () => {
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2  ${
-                          action == "/admin/properties"
-                            ? "bg-blue-500 p-4 text-white shadow-sm shadow-gray-300 font-bold text-[15px] rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2  ${action == "/admin/properties"
+                          ? "bg-blue-500 p-4 text-white shadow-sm shadow-gray-300 font-bold text-[15px] rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý khu nhà">
@@ -178,11 +196,10 @@ const SidebarAdmin = () => {
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/zones"
-                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2 ${action == "/admin/zones"
+                          ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý khu">
@@ -204,11 +221,10 @@ const SidebarAdmin = () => {
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/floors"
-                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2 ${action == "/admin/floors"
+                          ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý tầng">
@@ -230,11 +246,10 @@ const SidebarAdmin = () => {
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/rooms"
-                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2 ${action == "/admin/rooms"
+                          ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý phòng">
@@ -277,9 +292,8 @@ const SidebarAdmin = () => {
               )}
               {openMenu2 && (
                 <ul
-                  className={`flex flex-col justify-center gap-1 border p-2 pl-3.5 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${
-                    open == true ? "items-center" : ""
-                  }`}
+                  className={`flex flex-col justify-center gap-1 border p-2 pl-3.5 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${open == true ? "items-center" : ""
+                    }`}
                 >
                   <li>
                     <Link
@@ -288,11 +302,10 @@ const SidebarAdmin = () => {
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/properties"
-                            ? "bg-blue-500 p-4 text-white shadow-sm shadow-gray-300 font-bold text-[15px] rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2 ${action == "/admin/properties"
+                          ? "bg-blue-500 p-4 text-white shadow-sm shadow-gray-300 font-bold text-[15px] rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý khu nhà">
@@ -314,11 +327,10 @@ const SidebarAdmin = () => {
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/zones"
-                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2 ${action == "/admin/zones"
+                          ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý khu">
@@ -340,11 +352,10 @@ const SidebarAdmin = () => {
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/floors"
-                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2 ${action == "/admin/floors"
+                          ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý tầng">

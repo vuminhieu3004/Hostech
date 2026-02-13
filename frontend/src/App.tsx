@@ -9,6 +9,7 @@ import Properties from "./Pages/Admin/Properties/Properties";
 import Zones from "./Pages/Admin/Properties/Zones";
 import Floors from "./Pages/Admin/Properties/Floors";
 import Rooms from "./Pages/Admin/Properties/Rooms";
+import Services from "./Pages/Admin/Services/Services";
 import VerifyOTP from "./Pages/Client/VerifyOTP";
 import Notfound from "./Pages/Client/404";
 import { useTokenStore } from "./Stores/AuthStore";
@@ -40,6 +41,7 @@ function App() {
         { path: "zones", Component: Zones },
         { path: "floors", Component: Floors },
         { path: "rooms", Component: Rooms },
+        { path: "services", Component: Services },
       ],
     },
 
