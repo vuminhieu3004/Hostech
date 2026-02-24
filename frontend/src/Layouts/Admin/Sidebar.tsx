@@ -283,13 +283,13 @@ const SidebarAdmin = () => {
                 >
                   <li>
                     <Link
-                      to="/admin/properties"
-                      onClick={() => setAction("/admin/properties")}
+                      to="/admin/tenant"
+                      onClick={() => setAction("/admin/tenant")}
                     >
                       {" "}
                       <div
                         className={`flex items-center gap-2 ${
-                          action == "/admin/properties"
+                          action == "/admin/tenant"
                             ? "bg-blue-500 p-4 text-white shadow-sm shadow-gray-300 font-bold text-[15px] rounded-2xl"
                             : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
                         }`}

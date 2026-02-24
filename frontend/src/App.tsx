@@ -26,6 +26,7 @@ import DetailProperty from "./Pages/Admin/Properties/Property/detail";
 import DetailOrg from "./Pages/Admin/Properties/Orgs/detail";
 import DetailFloor from "./Pages/Admin/Properties/Floors/detail";
 import DetailRoom from "./Pages/Admin/Properties/Rooms/detail";
+import Tenant from "./Pages/Admin/UserManager/Tenants/Tenant";
 
 function App() {
   const restoreToken = useTokenStore((state) => state.restoreToken);
@@ -41,6 +42,7 @@ function App() {
 
   const router = useRoutes([
     { path: "/", element: <Navigate to={"/auth"} replace /> },
+    // Router Quản lý Đăng nhập và xác thực
     { path: "/auth", Component: AuthPage },
     { path: "/otp/verify", Component: VerifyOTP },
 
@@ -48,6 +50,7 @@ function App() {
       path: "admin",
       Component: LayoutAdmin,
       children: [
+        // Router Quản lý Tổ chức, Nhà, Tầng, Phòng
         { path: "/admin", Component: Dashboard },
         { path: "statistical", Component: Statistical },
         {
@@ -86,6 +89,8 @@ function App() {
             { path: "detailRoom/:id", Component: DetailRoom },
           ],
         },
+        //Router Quản lý người dùng
+        { path: "tenant", Component: Tenant },
       ],
     },
 
