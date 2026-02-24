@@ -1,7 +1,7 @@
 import { Table } from "antd";
 import React from "react";
 import { usePageStore } from "../../../../Stores/PageStore";
-import { Plus, Edit } from "lucide-react";
+import { Plus, Edit, Eye } from "lucide-react";
 import { Link, Outlet } from "react-router";
 import { useOpenStore } from "../../../../Stores/OpenStore";
 
@@ -27,6 +27,14 @@ const Floors = () => {
       key: "action",
       render: (_: any, record: any) => (
         <div className="flex gap-2">
+          <Link
+            to={`detailFloor/${record.id}`}
+            onClick={() => setOpenForm(true)}
+          >
+            <button className="flex items-center gap-1 px-3 py-1 rounded bg-green-500 text-white hover:bg-green-600 text-sm">
+              <Eye className="w-4 h-4" /> Xem
+            </button>
+          </Link>
           <Link to={`editFloor/${record.id}`} onClick={() => setOpenForm(true)}>
             <button className="flex items-center gap-1 px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600 text-sm">
               <Edit className="w-4 h-4" /> Sửa

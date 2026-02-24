@@ -22,6 +22,10 @@ import EditProperty from "./Pages/Admin/Properties/Property/edit";
 import EditOrg from "./Pages/Admin/Properties/Orgs/edit";
 import EditFloor from "./Pages/Admin/Properties/Floors/edit";
 import EditRoom from "./Pages/Admin/Properties/Rooms/edit";
+import DetailProperty from "./Pages/Admin/Properties/Property/detail";
+import DetailOrg from "./Pages/Admin/Properties/Orgs/detail";
+import DetailFloor from "./Pages/Admin/Properties/Floors/detail";
+import DetailRoom from "./Pages/Admin/Properties/Rooms/detail";
 
 function App() {
   const restoreToken = useTokenStore((state) => state.restoreToken);
@@ -52,6 +56,7 @@ function App() {
           children: [
             { path: "createProperty", Component: CreateProperty },
             { path: "editProperty/:id", Component: EditProperty },
+            { path: "detailProperty/:id", Component: DetailProperty },
           ],
         },
         {
@@ -60,6 +65,7 @@ function App() {
           children: [
             { path: "createOrg", Component: CreateOrg },
             { path: "editOrg/:id", Component: EditOrg },
+            { path: "detailOrg/:id", Component: DetailOrg },
           ],
         },
         {
@@ -68,6 +74,7 @@ function App() {
           children: [
             { path: "createFloor", Component: CreateFloor },
             { path: "editFloor/:id", Component: EditFloor },
+            { path: "detailFloor/:id", Component: DetailFloor },
           ],
         },
         {
@@ -76,6 +83,7 @@ function App() {
           children: [
             { path: "createRoom", Component: CreateRoom },
             { path: "editRoom/:id", Component: EditRoom },
+            { path: "detailRoom/:id", Component: DetailRoom },
           ],
         },
       ],

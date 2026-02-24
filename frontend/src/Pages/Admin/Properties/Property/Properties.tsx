@@ -1,6 +1,6 @@
 import { Table } from "antd";
 import { usePageStore } from "../../../../Stores/PageStore";
-import { Plus, Edit } from "lucide-react";
+import { Plus, Edit, Eye } from "lucide-react";
 import { Link, Outlet } from "react-router";
 import { useOpenStore } from "../../../../Stores/OpenStore";
 
@@ -30,14 +30,24 @@ const Properties = () => {
       title: "Thao tác",
       key: "action",
       render: (_: any, record: any) => (
-        <Link
-          to={`editProperty/${record.key}`}
-          onClick={() => setOpenForm(true)}
-        >
-          <button className="flex items-center gap-1 px-3 py-1 rounded bg-blue-500 text-white text-sm hover:bg-blue-600">
-            <Edit className="w-4 h-4" /> Sửa
-          </button>
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            to={`detailProperty/${record.key}`}
+            onClick={() => setOpenForm(true)}
+          >
+            <button className="flex items-center gap-1 px-3 py-1 rounded bg-green-500 text-white text-sm hover:bg-green-600">
+              <Eye className="w-4 h-4" /> Xem
+            </button>
+          </Link>
+          <Link
+            to={`editProperty/${record.key}`}
+            onClick={() => setOpenForm(true)}
+          >
+            <button className="flex items-center gap-1 px-3 py-1 rounded bg-blue-500 text-white text-sm hover:bg-blue-600">
+              <Edit className="w-4 h-4" /> Sửa
+            </button>
+          </Link>
+        </div>
       ),
     },
   ];

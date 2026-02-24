@@ -64,6 +64,11 @@ const AuthPage = () => {
   };
   return (
     <>
+      {loginMutation.isPending && (
+        <div className="fixed h-screen w-screen top-0 left-0 bg-black/50 text-center leading-160 text-white font-bold text-[18px]">
+          <span>Đang đăng nhập...</span>
+        </div>
+      )}
       <div className="p-3 max-h-170">
         <section className="flex w-full max-h-170">
           <div className="w-[70%] h-170 rounded-bl-2xl rounded-tl-2xl overflow-hidden bg-gradient-to-t from-blue-300 to-blue-600">

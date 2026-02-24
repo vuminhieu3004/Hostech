@@ -5,6 +5,7 @@ import { LogOut, User, UserCheck } from "lucide-react";
 import { useUserInfo } from "../../Hooks/useUserInfo";
 import { useTokenStore } from "../../Stores/AuthStore";
 import { useNavigate } from "react-router";
+import { message } from "antd";
 
 const ModalSetting = ({ children }: TGlobalProp<{ open: boolean }>) => {
   const { openModalSetting, setOpenModalSetting } = useOpenStore();
@@ -16,6 +17,7 @@ const ModalSetting = ({ children }: TGlobalProp<{ open: boolean }>) => {
   const handleLogout = () => {
     clearToken();
     setOpenModalSetting(false);
+    message.success("Đăng xuất thành công!");
     navigate("/auth");
   };
 
