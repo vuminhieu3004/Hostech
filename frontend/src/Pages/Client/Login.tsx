@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useOpenStore } from "../../Stores/OpenStore";
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeClosed, OctagonAlert } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Login } from "../../Services/Auth.service";
 import type { ILogin, ILoginResponse } from "../../Types/Auth.Type";
@@ -101,6 +101,10 @@ const AuthPage = () => {
                     {...register("login", { required: true })}
                     className="w-full border border-gray-400 rounded-[10px] focus:outline-none p-2 placeholder:text-[14px]"
                   />
+                  <span className="text-[13px] text-gray-500 pl-2 p-1 flex items-center gap-1">
+                    Nhập số điện thoại hoặc email{" "}
+                    <OctagonAlert className="w-4 text-amber-400" />
+                  </span>
                 </div>
                 <div className="relative flex flex-col w-full">
                   <label htmlFor="" className="p-1 pl-3">

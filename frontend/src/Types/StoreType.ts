@@ -2,10 +2,12 @@ import type { IMe } from "./Auth.Type";
 
 export interface IOpenTypeStore {
   open: boolean;
+  openForm: boolean;
   openModalSetting: boolean;
   openRegister: boolean;
   eyePassword: boolean;
   setOpen: (open: boolean) => void;
+  setOpenForm: (openForm: boolean) => void;
   setOpenModalSetting: (openModalSetting: boolean) => void;
   setOpenRegister: (openRegister: boolean) => void;
   setEyePassword: (eyePassword: boolean) => void;

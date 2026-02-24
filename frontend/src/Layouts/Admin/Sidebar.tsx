@@ -173,13 +173,13 @@ const SidebarAdmin = () => {
                   </li>
                   <li>
                     <Link
-                      to="/admin/zones"
-                      onClick={() => setAction("/admin/zones")}
+                      to="/admin/orgs"
+                      onClick={() => setAction("/admin/orgs")}
                     >
                       {" "}
                       <div
                         className={`flex items-center gap-2 ${
-                          action == "/admin/zones"
+                          action == "/admin/orgs"
                             ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
                             : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
                         }`}
@@ -191,7 +191,7 @@ const SidebarAdmin = () => {
                         ) : (
                           <>
                             <MapPinCheck />
-                            Quản lý khu
+                            Quản lý tổ chức
                           </>
                         )}
                       </div>
