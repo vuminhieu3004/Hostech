@@ -13,6 +13,7 @@ import {
   UserRoundCog,
   Users,
   Warehouse,
+  Zap,
 } from "lucide-react";
 import { useOpenMenu, useOpenStore } from "../../Stores/OpenStore";
 import { Link } from "react-router";
@@ -112,6 +113,29 @@ const SidebarAdmin = () => {
                   <>
                     <ChartSpline />
                     Thống kê
+                  </>
+                )}
+              </li>
+            </Link>
+            <Link
+              to="/admin/services"
+              onClick={() => setAction("/admin/services")}
+              className={`${
+                action == "/admin/services"
+                  ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                  : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+              }`}
+            >
+              {" "}
+              <li className="flex items-center gap-2">
+                {open ? (
+                  <span title="Dịch vụ">
+                    <Zap className="pr-1" />
+                  </span>
+                ) : (
+                  <>
+                    <Zap />
+                    Dịch vụ
                   </>
                 )}
               </li>
