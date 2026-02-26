@@ -27,6 +27,7 @@ import DetailOrg from "./Pages/Admin/Properties/Orgs/detail";
 import DetailFloor from "./Pages/Admin/Properties/Floors/detail";
 import DetailRoom from "./Pages/Admin/Properties/Rooms/detail";
 import Tenant from "./Pages/Admin/UserManager/Tenants/Tenant";
+import Services from "./Pages/Admin/Services/Services";
 
 function App() {
   const restoreToken = useTokenStore((state) => state.restoreToken);
@@ -91,6 +92,9 @@ function App() {
         },
         //Router Quản lý người dùng
         { path: "tenant", Component: Tenant },
+
+        //Router Quản lý dịch vụ
+        { path: "services", Component: Services },
       ],
     },
 
