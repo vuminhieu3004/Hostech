@@ -1,22 +1,19 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Table, Button, Popconfirm, Tag, Tooltip, notification } from "antd";
 import { Edit, Trash2, Plus } from "lucide-react";
+import { useNavigate } from "react-router";
 import { getServices, deleteService } from "../../Api/ServiceApi";
 import { ServiceCalcModeLabels } from "../../Types/ServiceTypes";
 import type { Service } from "../../Types/ServiceTypes";
-import { useServiceStore } from "../../Stores/useServiceStore";
-// import { useTokenStore } from "../../Stores/AuthStore";
 
 const ServiceList = () => {
     const { data: services, isLoading } = useQuery({ queryKey: ["services"], queryFn: getServices });
-    const { openModal } = useServiceStore();
     const queryClient = useQueryClient();
-    // const userRole = useTokenStore((state) => state.role);
+    const navigate = useNavigate();
 
-    // Kiểm tra phân quyền đơn giản: chỉ 'admin' hoặc các vai trò cụ thể mới có thể sửa/xóa
-    // Giả sử 'admin' là key của vai trò.
-    // Để test, cho phép chỉnh sửa với mọi người hoặc kiểm tra nếu user tồn tại
-    const canEdit = true; // userRole === "admin" || userRole === "manager";
+    // Để test, cho phép chỉnh sửa với mọi người
+    // Khi tích hợp API thật, bỏ comment và kiểm tra role
+    const canEdit = true; // userRole === "admin" || userRole === "manager"
 
     const deleteMutation = useMutation({
         mutationFn: deleteService,
@@ -34,7 +31,6 @@ const ServiceList = () => {
             title: "Mã",
             dataIndex: "code",
             key: "code",
-            fontWeight: "bold",
         },
         {
             title: "Tên dịch vụ",
@@ -78,7 +74,7 @@ const ServiceList = () => {
                         <Button
                             disabled={!canEdit}
                             icon={<Edit size={16} />}
-                            onClick={() => openModal(record)}
+                            onClick={() => navigate(`/admin/services/editService/${record.id}`)}
                         />
                     </Tooltip>
 
@@ -104,7 +100,7 @@ const ServiceList = () => {
                     <Button
                         type="primary"
                         icon={<Plus size={16} />}
-                        onClick={() => openModal()}
+                        onClick={() => navigate("/admin/services/createService")}
                         className="bg-blue-600"
                     >
                         Thêm dịch vụ

@@ -28,6 +28,13 @@ import DetailFloor from "./Pages/Admin/Properties/Floors/detail";
 import DetailRoom from "./Pages/Admin/Properties/Rooms/detail";
 import Tenant from "./Pages/Admin/UserManager/Tenants/Tenant";
 import Services from "./Pages/Admin/Services/Services";
+import CreateService from "./Pages/Admin/Services/Create";
+import EditService from "./Pages/Admin/Services/Edit";
+import Contracts from "./Pages/Admin/Contracts/Contracts";
+import CreateContract from "./Pages/Admin/Contracts/Create";
+import EditContract from "./Pages/Admin/Contracts/Edit";
+import ContractDetail from "./Pages/Admin/Contracts/Detail";
+import DeletedContracts from "./Pages/Admin/Contracts/DeletedContracts";
 
 function App() {
   const restoreToken = useTokenStore((state) => state.restoreToken);
@@ -94,7 +101,26 @@ function App() {
         { path: "tenant", Component: Tenant },
 
         //Router Quản lý dịch vụ
-        { path: "services", Component: Services },
+        {
+          path: "services",
+          Component: Services,
+          children: [
+            { path: "createService", Component: CreateService },
+            { path: "editService/:id", Component: EditService },
+          ],
+        },
+
+        //Router Quản lý hợp đồng
+        {
+          path: "contracts",
+          Component: Contracts,
+          children: [
+            { path: "create", Component: CreateContract },
+            { path: "edit/:id", Component: EditContract },
+            { path: "detail/:id", Component: ContractDetail },
+            { path: "deleted", Component: DeletedContracts },
+          ],
+        },
       ],
     },
 
