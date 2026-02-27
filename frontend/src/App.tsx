@@ -35,6 +35,11 @@ import CreateContract from "./Pages/Admin/Contracts/Create";
 import EditContract from "./Pages/Admin/Contracts/Edit";
 import ContractDetail from "./Pages/Admin/Contracts/Detail";
 import DeletedContracts from "./Pages/Admin/Contracts/DeletedContracts";
+import Invoices from "./Pages/Admin/Invoices/Invoices";
+import CreateInvoice from "./Pages/Admin/Invoices/Create";
+import EditInvoice from "./Pages/Admin/Invoices/Edit";
+import InvoiceDetail from "./Pages/Admin/Invoices/Detail";
+import DeletedInvoices from "./Pages/Admin/Invoices/DeletedInvoices";
 
 function App() {
   const restoreToken = useTokenStore((state) => state.restoreToken);
@@ -119,6 +124,18 @@ function App() {
             { path: "edit/:id", Component: EditContract },
             { path: "detail/:id", Component: ContractDetail },
             { path: "deleted", Component: DeletedContracts },
+          ],
+        },
+
+        //Router Quản lý hóa đơn
+        {
+          path: "invoices",
+          Component: Invoices,
+          children: [
+            { path: "create", Component: CreateInvoice },
+            { path: "edit/:id", Component: EditInvoice },
+            { path: "detail/:id", Component: InvoiceDetail },
+            { path: "deleted", Component: DeletedInvoices },
           ],
         },
       ],

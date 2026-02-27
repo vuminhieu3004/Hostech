@@ -9,6 +9,7 @@ import {
   MapPinHouse,
   PanelRightClose,
   PanelRightOpen,
+  Receipt,
   StretchHorizontal,
   UserPen,
   UserRoundCog,
@@ -155,6 +156,28 @@ const SidebarAdmin = () => {
                   <>
                     <FileText />
                     Hợp đồng
+                  </>
+                )}
+              </li>
+            </Link>
+            <Link
+              to="/admin/invoices"
+              onClick={() => setAction("/admin/invoices")}
+              className={`${action == "/admin/invoices"
+                ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                }`}
+            >
+              {" "}
+              <li className="flex items-center gap-2">
+                {open ? (
+                  <span title="Hóa đơn">
+                    <Receipt className="pr-1" />
+                  </span>
+                ) : (
+                  <>
+                    <Receipt />
+                    Hóa đơn
                   </>
                 )}
               </li>
