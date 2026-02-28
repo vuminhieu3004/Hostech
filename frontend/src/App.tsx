@@ -37,6 +37,18 @@ import DetailManager from "./Pages/Admin/UserManager/Manager/detail";
 import Staff from "./Pages/Admin/UserManager/Staff/Staff";
 import DetailStaff from "./Pages/Admin/UserManager/Staff/detail";
 import Services from "./Pages/Admin/Services/Services";
+import CreateService from "./Pages/Admin/Services/Create";
+import EditService from "./Pages/Admin/Services/Edit";
+import Contracts from "./Pages/Admin/Contracts/Contracts";
+import CreateContract from "./Pages/Admin/Contracts/Create";
+import EditContract from "./Pages/Admin/Contracts/Edit";
+import ContractDetail from "./Pages/Admin/Contracts/Detail";
+import DeletedContracts from "./Pages/Admin/Contracts/DeletedContracts";
+import Invoices from "./Pages/Admin/Invoices/Invoices";
+import CreateInvoice from "./Pages/Admin/Invoices/Create";
+import EditInvoice from "./Pages/Admin/Invoices/Edit";
+import InvoiceDetail from "./Pages/Admin/Invoices/Detail";
+import DeletedInvoices from "./Pages/Admin/Invoices/DeletedInvoices";
 
 function App() {
   const restoreToken = useTokenStore((state) => state.restoreToken);
@@ -128,7 +140,38 @@ function App() {
         },
 
         //Router Quản lý dịch vụ
-        { path: "services", Component: Services },
+        {
+          path: "services",
+          Component: Services,
+          children: [
+            { path: "createService", Component: CreateService },
+            { path: "editService/:id", Component: EditService },
+          ],
+        },
+
+        //Router Quản lý hợp đồng
+        {
+          path: "contracts",
+          Component: Contracts,
+          children: [
+            { path: "create", Component: CreateContract },
+            { path: "edit/:id", Component: EditContract },
+            { path: "detail/:id", Component: ContractDetail },
+            { path: "deleted", Component: DeletedContracts },
+          ],
+        },
+
+        //Router Quản lý hóa đơn
+        {
+          path: "invoices",
+          Component: Invoices,
+          children: [
+            { path: "create", Component: CreateInvoice },
+            { path: "edit/:id", Component: EditInvoice },
+            { path: "detail/:id", Component: InvoiceDetail },
+            { path: "deleted", Component: DeletedInvoices },
+          ],
+        },
       ],
     },
 

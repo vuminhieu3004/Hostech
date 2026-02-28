@@ -2,12 +2,14 @@ import {
   ChartSpline,
   ChevronDown,
   ChevronRight,
+  FileText,
   House,
   LayoutDashboard,
   MapPinCheck,
   MapPinHouse,
   PanelRightClose,
   PanelRightOpen,
+  Receipt,
   StretchHorizontal,
   UserPen,
   UserRoundCog,
@@ -142,7 +144,53 @@ const SidebarAdmin = () => {
                 )}
               </li>
             </Link>
-            <ul className="w-full flex text-[15px] flex-col gap-3 p-1 rounded-2xl shadow-sm shadow-gray-400">
+            <Link
+              to="/admin/contracts"
+              onClick={() => setAction("/admin/contracts")}
+              className={`${
+                action == "/admin/contracts"
+                  ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                  : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+              }`}
+            >
+              {" "}
+              <li className="flex items-center gap-2">
+                {open ? (
+                  <span title="Hợp đồng">
+                    <FileText className="pr-1" />
+                  </span>
+                ) : (
+                  <>
+                    <FileText />
+                    Hợp đồng
+                  </>
+                )}
+              </li>
+            </Link>
+            <Link
+              to="/admin/invoices"
+              onClick={() => setAction("/admin/invoices")}
+              className={`${
+                action == "/admin/invoices"
+                  ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                  : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+              }`}
+            >
+              {" "}
+              <li className="flex items-center gap-2">
+                {open ? (
+                  <span title="Hóa đơn">
+                    <Receipt className="pr-1" />
+                  </span>
+                ) : (
+                  <>
+                    <Receipt />
+                    Hóa đơn
+                  </>
+                )}
+              </li>
+            </Link>
+            <ul className="w-full flex text-[15px] flex-col gap-3  border border-gray-300 p-1 rounded-2xl shadow-sm shadow-gray-400">
               {open === false ? (
                 <li>
                   <div
@@ -347,7 +395,33 @@ const SidebarAdmin = () => {
                         }`}
                       >
                         {open ? (
-                          <span title="Quản lý người thuê">
+                          <span title="Quản lý khu nhà">
+                            <Users className="pr-1" />
+                          </span>
+                        ) : (
+                          <>
+                            <Users />
+                            Quản lý
+                          </>
+                        )}
+                      </div>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/admin/zones"
+                      onClick={() => setAction("/admin/zones")}
+                    >
+                      {" "}
+                      <div
+                        className={`flex items-center gap-2 ${
+                          action == "/admin/zones"
+                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                        }`}
+                      >
+                        {open ? (
+                          <span title="Quản lý khu">
                             <Users className="pr-1" />
                           </span>
                         ) : (
