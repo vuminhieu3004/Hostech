@@ -13,25 +13,24 @@ import {
   UserRoundCog,
   Users,
   Warehouse,
+  Zap,
+  Gauge,
+  Shield,
 } from "lucide-react";
 import { useOpenMenu, useOpenStore } from "../../Stores/OpenStore";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import Register from "../../Components/Auth/Register";
+import Authorization from "../../Components/Auth/verifyLogin";
+import { useTokenStore } from "../../Stores/AuthStore";
 
 const SidebarAdmin = () => {
   const { open, openRegister, setOpen, setOpenRegister } = useOpenStore();
-  const {
-    openMenu1,
-    openMenu2,
-    openMenu3,
-    setOpenMenu1,
-    setOpenMenu2,
-    setOpenMenu3,
-  } = useOpenMenu();
+  const { openMenu1, openMenu2, setOpenMenu1, setOpenMenu2 } = useOpenMenu();
   const location = useLocation();
   const [action, setAction] = useState<string>(location.pathname);
+  const role = useTokenStore((state) => state.role);
 
   useEffect(() => {
     if (openRegister) {
@@ -50,7 +49,7 @@ const SidebarAdmin = () => {
             <img
               src="/images/logo_du_an.jpg"
               alt=""
-              className="w-13 h-13 rounded-full m-4 "
+              className="w-13 h-13 rounded-full m-3.5"
             />
             <p
               className={`font-semibold text-blue-900 text-2xl ${open ? "pl-2" : ""}`}
@@ -62,18 +61,18 @@ const SidebarAdmin = () => {
             {open ? (
               <PanelRightClose
                 onClick={() => setOpen(!open)}
-                className="absolute cursor-pointer text-blue-900 inset-y-9 -right-3"
+                className="absolute cursor-pointer text-blue-900 inset-y-7.5 -right-3 hover:text-blue-700"
               />
             ) : (
               <PanelRightOpen
                 onClick={() => setOpen(!open)}
-                className="absolute cursor-pointer text-blue-900 inset-y-9 -right-3"
+                className="absolute cursor-pointer text-blue-900 inset-y-7.5 -right-3 hover:text-blue-700"
               />
             )}
           </div>
         </div>
         <div>
-          <ul className="ul p-5 pt-4 flex flex-col gap-2 max-h-150 overflow-scroll">
+          <ul className="ul text-[15px] p-5 pt-4 flex flex-col gap-2 max-h-150 overflow-scroll">
             <Link
               to="/admin"
               onClick={() => setAction("/admin")}
@@ -120,7 +119,30 @@ const SidebarAdmin = () => {
                 )}
               </li>
             </Link>
-            <ul className="w-full flex flex-col gap-3  border border-gray-300 p-1 rounded-2xl shadow-sm shadow-gray-400">
+            <Link
+              to="/admin/services"
+              onClick={() => setAction("/admin/services")}
+              className={`${
+                action == "/admin/services"
+                  ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                  : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+              }`}
+            >
+              {" "}
+              <li className="flex items-center gap-2">
+                {open ? (
+                  <span title="Dịch vụ">
+                    <Zap className="pr-1" />
+                  </span>
+                ) : (
+                  <>
+                    <Zap />
+                    Dịch vụ
+                  </>
+                )}
+              </li>
+            </Link>
+            <ul className="w-full flex text-[15px] flex-col gap-3 p-1 rounded-2xl shadow-sm shadow-gray-400">
               {open === false ? (
                 <li>
                   <div
@@ -177,13 +199,13 @@ const SidebarAdmin = () => {
                   </li>
                   <li>
                     <Link
-                      to="/admin/zones"
-                      onClick={() => setAction("/admin/zones")}
+                      to="/admin/orgs"
+                      onClick={() => setAction("/admin/orgs")}
                     >
                       {" "}
                       <div
                         className={`flex items-center gap-2 ${
-                          action == "/admin/zones"
+                          action == "/admin/orgs"
                             ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
                             : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
                         }`}
@@ -195,7 +217,7 @@ const SidebarAdmin = () => {
                         ) : (
                           <>
                             <MapPinCheck />
-                            Quản lý khu
+                            Quản lý tổ chức
                           </>
                         )}
                       </div>
@@ -253,10 +275,36 @@ const SidebarAdmin = () => {
                       </div>
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      to="/admin/meters"
+                      onClick={() => setAction("/admin/meters")}
+                    >
+                      {" "}
+                      <div
+                        className={`flex items-center gap-2 ${
+                          action == "/admin/meters"
+                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                        }`}
+                      >
+                        {open ? (
+                          <span title="Quản lý đồng hồ">
+                            <Gauge className="pr-1" />
+                          </span>
+                        ) : (
+                          <>
+                            <Gauge />
+                            Quản lý đồng hồ
+                          </>
+                        )}
+                      </div>
+                    </Link>
+                  </li>
                 </ul>
               )}
             </ul>
-            <ul className="w-full flex flex-col gap-3 border border-gray-300 p-1 rounded-2xl shadow-sm shadow-gray-400">
+            <ul className="w-full flex flex-col gap-3 p-1 rounded-2xl shadow-sm shadow-gray-400">
               {open === false ? (
                 <li>
                   <div
@@ -287,45 +335,19 @@ const SidebarAdmin = () => {
                 >
                   <li>
                     <Link
-                      to="/admin/properties"
-                      onClick={() => setAction("/admin/properties")}
+                      to="/admin/tenant"
+                      onClick={() => setAction("/admin/tenant")}
                     >
                       {" "}
                       <div
                         className={`flex items-center gap-2 ${
-                          action == "/admin/properties"
+                          action == "/admin/tenant"
                             ? "bg-blue-500 p-4 text-white shadow-sm shadow-gray-300 font-bold text-[15px] rounded-2xl"
                             : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
                         }`}
                       >
                         {open ? (
-                          <span title="Quản lý khu nhà">
-                            <Users className="pr-1" />
-                          </span>
-                        ) : (
-                          <>
-                            <Users />
-                            Quản lý
-                          </>
-                        )}
-                      </div>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/admin/zones"
-                      onClick={() => setAction("/admin/zones")}
-                    >
-                      {" "}
-                      <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/zones"
-                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
-                      >
-                        {open ? (
-                          <span title="Quản lý khu">
+                          <span title="Quản lý người thuê">
                             <Users className="pr-1" />
                           </span>
                         ) : (
@@ -339,24 +361,50 @@ const SidebarAdmin = () => {
                   </li>
                   <li>
                     <Link
-                      to="/admin/floors"
-                      onClick={() => setAction("/admin/floors")}
+                      to="/admin/manager"
+                      onClick={() => setAction("/admin/manager")}
                     >
                       {" "}
                       <div
                         className={`flex items-center gap-2 ${
-                          action == "/admin/floors"
+                          action == "/admin/manager"
                             ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
                             : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
                         }`}
                       >
                         {open ? (
-                          <span title="Quản lý tầng">
-                            <Users className="pr-1" />
+                          <span title="Quản lý quản lý">
+                            <UserRoundCog className="pr-1" />
                           </span>
                         ) : (
                           <>
-                            <Users />
+                            <UserRoundCog />
+                            Quản lý
+                          </>
+                        )}
+                      </div>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/admin/staff"
+                      onClick={() => setAction("/admin/staff")}
+                    >
+                      {" "}
+                      <div
+                        className={`flex items-center gap-2 ${
+                          action == "/admin/staff"
+                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                        }`}
+                      >
+                        {open ? (
+                          <span title="Quản lý nhân viên">
+                            <Shield className="pr-1" />
+                          </span>
+                        ) : (
+                          <>
+                            <Shield />
                             Nhân viên
                           </>
                         )}
@@ -364,15 +412,31 @@ const SidebarAdmin = () => {
                     </Link>
                   </li>
                   <li>
-                    <Register open={openRegister}>
-                      <button
-                        className={`${openRegister ? "flex items-center gap-1 bg-blue-500 p-4 text-white font-bold text-[14px] shadow-sm shadow-gray-300 rounded-2xl" : "flex items-center gap-1 p-4 text-[15px] cursor-pointer hover:bg-blue-300 rounded-2xl hover:text-white"}`}
-                        onClick={() => setOpenRegister(true)}
+                    {role && (
+                      <Authorization
+                        role={role || ""}
+                        allowRole={["OWNER", "MANAGER"]}
                       >
-                        <UserPen />
-                        Thêm người thuê
-                      </button>
-                    </Register>
+                        <Register open={openRegister}>
+                          {open ? (
+                            <button
+                              className={`${openRegister ? "flex items-center gap-1 bg-blue-500 p-4 text-white font-bold text-[14px] shadow-sm shadow-gray-300 rounded-2xl" : "flex items-center gap-1 p-4 text-[15px] cursor-pointer hover:bg-blue-300 rounded-2xl hover:text-white"}`}
+                              onClick={() => setOpenRegister(true)}
+                            >
+                              <UserPen />
+                            </button>
+                          ) : (
+                            <button
+                              className={`${openRegister ? "flex items-center gap-1 bg-blue-500 p-4 text-white font-bold text-[14px] shadow-sm shadow-gray-300 rounded-2xl" : "flex items-center gap-1 p-4 text-[15px] cursor-pointer hover:bg-blue-300 rounded-2xl hover:text-white"}`}
+                              onClick={() => setOpenRegister(true)}
+                            >
+                              <UserPen />
+                              Thêm người thuê
+                            </button>
+                          )}
+                        </Register>
+                      </Authorization>
+                    )}
                   </li>
                 </ul>
               )}
