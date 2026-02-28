@@ -80,80 +80,125 @@ const VerifyOTP = () => {
   return (
     <>
       {loading && (
-        <div className="fixed h-screen w-screen top-0 left-0 bg-black/50 text-center leading-160 text-white font-bold text-[18px]">
-          <span>Đang xác thực...</span>
+        <div className="fixed h-screen w-screen top-0 left-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative w-16 h-16">
+              <svg
+                className="w-16 h-16 text-white animate-spin"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            </div>
+            <div className="text-white font-semibold text-lg">
+              Đang xác thực...
+            </div>
+          </div>
         </div>
       )}
-      <div className="p-3 max-h-170">
-        <section className="flex w-full max-h-170">
-          <div className="w-[70%] h-170 rounded-bl-2xl rounded-tl-2xl overflow-hidden bg-gradient-to-t from-blue-300 to-blue-600">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+        <section className="flex w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden">
+          <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 flex-col items-center justify-center p-12">
             <img
               src="/images/logo_du_an.jpg"
-              alt=""
-              className="object-cover w-100 h-100 rounded-full ml-[28%] mt-[14%]"
+              alt="Hostech"
+              className="w-40 h-40 rounded-full border-4 border-white shadow-lg mb-6"
             />
+            <h1 className="text-white text-4xl font-bold text-center mb-2">
+              Hostech
+            </h1>
+            <p className="text-blue-100 text-center text-lg">
+              Quản lý khu nhà và người dùng
+            </p>
           </div>
-          <div className="flex flex-col justify-center w-[30%] bg-white border rounded-tr-2xl rounded-br-2xl border-gray-300 items-start p-5">
-            <div className="text-center">
-              <h2 className="p-10 pl-13 text-3xl font-bold text-blue-600">
-                Welcome to Hostech
-              </h2>
-            </div>
-            <div className="flex flex-col justify-center w-full bg-white border border-gray-300  shadow-2xl shadow-blue-500 rounded-[10px] items-start p-10">
-              <h2 className="w-full text-center text-2xl font-semibold pb-5">
+          <div className="flex-1 flex flex-col justify-center p-8 lg:p-12">
+            <div className="mb-8">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-2">
                 Xác thực OTP
+              </h2>
+              <p className="text-gray-600">
+                Nhập mã OTP đã gửi đến số điện thoại của bạn
+              </p>
+            </div>
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-8 shadow-lg">
+              <h2 className="w-full text-center text-2xl font-bold text-gray-800 pb-6">
+                Nhập mã xác thực
               </h2>
 
               {dev_otp && (
-                <p className="text-sm text-gray-500 mb-2">
-                  OTP dev: <b>{dev_otp}</b>
-                </p>
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+                  <p className="text-sm text-yellow-800">
+                    <span className="font-semibold">OTP Dev:</span>{" "}
+                    <span className="font-mono font-bold text-lg text-yellow-900">
+                      {dev_otp}
+                    </span>
+                  </p>
+                </div>
               )}
 
               <form
                 onSubmit={handleSubmit(handleOTP)}
                 className="w-full flex flex-col gap-2"
               >
-                <div className="flex flex-col w-full">
-                  <label className="p-1 pl-3">Xác thực OTP(*)</label>
+                <div className="flex flex-col w-full mb-6">
+                  <label className="text-sm font-semibold text-gray-700 mb-2">
+                    Mã OTP
+                  </label>
                   <input
                     type="text"
-                    placeholder="Nhập mã OTP vừa nhận..."
+                    placeholder="Nhập mã OTP 6 chữ số"
                     {...register("otp", { required: true })}
-                    className="w-full border border-gray-400 rounded-[10px] p-2 focus:outline-none placeholder:text-[14px]"
+                    className="w-full border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 p-3 placeholder:text-gray-400 text-center text-2xl font-bold tracking-widest transition"
+                    maxLength={6}
                   />
                 </div>
-                <div className="flex justify-center items-center gap-2 mt-3">
+                <div className="flex flex-col gap-3">
                   <button
                     type="submit"
-                    className="w-35 p-2 bg-red-500 rounded-[10px] text-white hover:bg-red-600 cursor-pointer"
+                    disabled={loading}
+                    className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Xác nhận
+                    {loading ? "Đang xác thực..." : "Xác nhận"}
                   </button>
                   <button
-                    type="submit"
+                    type="button"
                     onClick={() => {
                       handleResendOTP();
                       setTime(60);
                     }}
-                    className="w-35 p-2 border border-gray-300 rounded-[10px] hover:bg-gray-200 cursor-pointer"
+                    disabled={time > 0}
+                    className="w-full py-2 border-2 border-blue-500 text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-400"
                   >
-                    gửi lại mã
+                    Gửi lại mã
                   </button>
                 </div>
-                {time > 0 ? (
-                  <div className="text-center mt-5 text-[15px]">
-                    <span className="text-gray-500">
-                      xác thực mã otp của bạn: 00:{time}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="text-center mt-5 text-[15px]">
-                    <span className="text-gray-500">
-                      Bạn đã nhận được mã chưa?
-                    </span>
-                  </div>
-                )}
+                <div className="text-center mt-6">
+                  {time > 0 ? (
+                    <p className="text-sm text-gray-600">
+                      Gửi lại mã trong:{" "}
+                      <span className="font-bold text-blue-600">
+                        00:{String(time).padStart(2, "0")}
+                      </span>
+                    </p>
+                  ) : (
+                    <p className="text-sm text-gray-600">
+                      Bạn chưa nhận được mã?
+                    </p>
+                  )}
+                </div>
               </form>
             </div>
           </div>

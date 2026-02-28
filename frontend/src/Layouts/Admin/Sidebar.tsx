@@ -190,7 +190,7 @@ const SidebarAdmin = () => {
                 )}
               </li>
             </Link>
-            <ul className="w-full flex text-[15px] flex-col gap-3  border border-gray-300 p-1 rounded-2xl shadow-sm shadow-gray-400">
+            <ul className="w-full flex text-[15px] flex-col gap-3 p-1 rounded-2xl shadow-sm shadow-gray-400">
               {open === false ? (
                 <li>
                   <div

@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useOpenStore } from "../../Stores/OpenStore";
-import { Eye, EyeClosed, OctagonAlert } from "lucide-react";
+import { Eye, EyeClosed, OctagonAlert, Loader } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Login } from "../../Services/Auth.service";
 import type { ILogin, ILoginResponse } from "../../Types/Auth.Type";
@@ -65,94 +65,91 @@ const AuthPage = () => {
   return (
     <>
       {loginMutation.isPending && (
-        <div className="fixed h-screen w-screen top-0 left-0 bg-black/50 text-center leading-160 text-white font-bold text-[18px] z-20">
-          <span>Đang đăng nhập...</span>
+        <div className="fixed h-screen w-screen top-0 left-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative w-16 h-16">
+              <Loader className="w-16 h-16 text-white animate-spin" />
+            </div>
+            <div className="text-white font-semibold text-lg">
+              Đang đăng nhập...
+            </div>
+          </div>
         </div>
       )}
-      <div className="p-3 max-h-170">
-        <section className="flex w-full max-h-170">
-          <div className="w-[70%] h-170 rounded-bl-2xl rounded-tl-2xl overflow-hidden bg-gradient-to-t from-blue-300 to-blue-600">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+        <section className="flex w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden">
+          <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 flex-col items-center justify-center p-12">
             <img
               src="/images/logo_du_an.jpg"
-              alt=""
-              className="object-cover w-100 h-100 rounded-full ml-[28%] mt-[14%]"
+              alt="Hostech"
+              className="w-40 h-40 rounded-full border-4 border-white shadow-lg mb-6"
             />
+            <h1 className="text-white text-4xl font-bold text-center mb-2">
+              Hostech
+            </h1>
+            <p className="text-blue-100 text-center text-lg">
+              Quản lý khu nhà và người dùng
+            </p>
           </div>
-          <div
-            className={`flex flex-col justify-center  w-[30%]  bg-white border rounded-tr-2xl rounded-br-2xl border-gray-300 items-start p-5 transition-all duration-500 ease-in-out
-       
-      `}
-          >
-            <div className="text-center">
-              <h2 className="p-10 pl-13 text-3xl font-bold text-blue-600">
+          <div className="flex-1 flex flex-col justify-center p-8 lg:p-12">
+            <div className="mb-8">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-2">
                 Welcome to Hostech
               </h2>
+              <p className="text-gray-600">Vui lòng đăng nhập để tiếp tục</p>
             </div>
-            <div className="flex flex-col justify-center w-full bg-white border shadow-2xl shadow-blue-500 border-gray-300 rounded-[10px] items-start p-10 transition-all duration-500 ease-in-out">
-              <h2 className="w-full text-center text-2xl font-semibold pb-5">
-                Đăng nhập
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-8 shadow-lg">
+              <h2 className="w-full text-center text-2xl font-bold text-gray-800 pb-6">
+                Đăng nhập tài khoản
               </h2>
               <form
                 onSubmit={handleSubmit(handleLogin)}
                 className="w-full flex flex-col gap-2"
               >
-                <div className="flex flex-col w-full">
-                  <label htmlFor="" className="p-1 pl-3">
-                    Tài khoản(*)
+                <div className="flex flex-col w-full mb-4">
+                  <label className="text-sm font-semibold text-gray-700 mb-2">
+                    Tài khoản
                   </label>
                   <input
                     type="text"
-                    placeholder="Email hoặc số điện thoại..."
+                    placeholder="Email hoặc số điện thoại"
                     {...register("login", { required: true })}
-                    className="w-full border border-gray-400 rounded-[10px] focus:outline-none p-2 placeholder:text-[14px]"
+                    className="w-full border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 p-3 placeholder:text-gray-400 transition"
                   />
-                  <span className="text-[13px] text-gray-500 pl-2 p-1 flex items-center gap-1">
-                    Nhập số điện thoại hoặc email{" "}
-                    <OctagonAlert className="w-4 text-amber-400" />
+                  <span className="text-xs text-gray-600 mt-2 flex items-center gap-1">
+                    <OctagonAlert className="w-3.5 text-amber-500" />
+                    Nhập số điện thoại hoặc email
                   </span>
                 </div>
-                <div className="relative flex flex-col w-full">
-                  <label htmlFor="" className="p-1 pl-3">
-                    Mật khẩu(*)
+                <div className="relative flex flex-col w-full mb-6">
+                  <label className="text-sm font-semibold text-gray-700 mb-2">
+                    Mật khẩu
                   </label>
                   <input
                     type={eyePassword ? "text" : "password"}
-                    placeholder="Nhập mật khẩu đăng nhập..."
+                    placeholder="Nhập mật khẩu đăng nhập"
                     {...register("password", { required: true })}
-                    className="w-full border border-gray-400 rounded-[10px] focus:outline-none p-2 placeholder:text-[14px]"
+                    className="w-full border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 p-3 placeholder:text-gray-400 transition"
                   />
-                  <div className="absolute inset-y-10 right-4">
-                    {eyePassword ? (
-                      <Eye
-                        onClick={() => setEyePassword(false)}
-                        className="cursor-pointer"
-                      />
-                    ) : (
-                      <EyeClosed
-                        onClick={() => setEyePassword(true)}
-                        className="cursor-pointer"
-                      />
-                    )}
-                  </div>
-                </div>
-                <div className="mt-2 flex flex-col gap-2 items-center">
-                  <button className="w-full cursor-pointer flex items-center justify-center hover:font-semibold border border-gray-300 p-2 rounded-[10px] text-[15px]">
-                    Đăng nhập bằng google
-                    <img
-                      src="./images/Auth/gg.png"
-                      alt="google"
-                      className="w-10 rounded-full"
-                    />
-                  </button>
-                </div>
-                <div className="flex flex-col items-center gap-2 mt-3">
                   <button
-                    type="submit"
-                    className="w-35 p-2 bg-red-500 rounded-[10px] cursor-pointer text-white hover:font-semibold hover:bg-red-600"
+                    type="button"
+                    onClick={() => setEyePassword(!eyePassword)}
+                    className="absolute right-3 top-11 text-gray-500 hover:text-gray-700 transition"
                   >
-                    Đăng nhập
+                    {eyePassword ? (
+                      <Eye className="w-5 h-5" />
+                    ) : (
+                      <EyeClosed className="w-5 h-5" />
+                    )}
                   </button>
                 </div>
+                <button
+                  type="submit"
+                  disabled={loginMutation.isPending}
+                  className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition shadow-md hover:shadow-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loginMutation.isPending ? "Đang đăng nhập..." : "Đăng nhập"}
+                </button>
               </form>
             </div>
           </div>
