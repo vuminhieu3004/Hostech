@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, message, Modal } from "antd";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useLocation } from "react-router";
 import {
   ArrowLeft,
   Edit,
@@ -21,9 +21,16 @@ interface OrgDetail {
 
 const DetailOrg = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams();
   const closeForm = useOpenStore((state) => state.setOpenForm);
   const [data, setData] = useState<OrgDetail | null>(null);
+
+  useEffect(() => {
+    return () => {
+      closeForm(false);
+    };
+  }, [closeForm]);
 
   useEffect(() => {
     const mockData: OrgDetail = {

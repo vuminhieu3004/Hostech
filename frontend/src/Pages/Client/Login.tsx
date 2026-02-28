@@ -65,7 +65,7 @@ const AuthPage = () => {
   return (
     <>
       {loginMutation.isPending && (
-        <div className="fixed h-screen w-screen top-0 left-0 bg-black/50 text-center leading-160 text-white font-bold text-[18px]">
+        <div className="fixed h-screen w-screen top-0 left-0 bg-black/50 text-center leading-160 text-white font-bold text-[18px] z-20">
           <span>Đang đăng nhập...</span>
         </div>
       )}

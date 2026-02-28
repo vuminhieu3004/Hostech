@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Input, message } from "antd";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useLocation } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { useOpenStore } from "../../../../Stores/OpenStore";
 
@@ -15,6 +15,7 @@ interface FormErrors {
 
 const EditFloor = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams();
   const closeForm = useOpenStore((state) => state.setOpenForm);
   const [formData, setFormData] = useState<EditFloorForm>({
@@ -22,6 +23,12 @@ const EditFloor = () => {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      closeForm(false);
+    };
+  }, [closeForm]);
 
   useEffect(() => {
     // Lấy dữ liệu từ API

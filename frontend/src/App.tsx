@@ -26,7 +26,16 @@ import DetailProperty from "./Pages/Admin/Properties/Property/detail";
 import DetailOrg from "./Pages/Admin/Properties/Orgs/detail";
 import DetailFloor from "./Pages/Admin/Properties/Floors/detail";
 import DetailRoom from "./Pages/Admin/Properties/Rooms/detail";
+import Meters from "./Pages/Admin/Properties/Meters/Meters";
+import CreateMeter from "./Pages/Admin/Properties/Meters/create";
+import EditMeter from "./Pages/Admin/Properties/Meters/edit";
+import DetailMeter from "./Pages/Admin/Properties/Meters/detail";
 import Tenant from "./Pages/Admin/UserManager/Tenants/Tenant";
+import DetailTenant from "./Pages/Admin/UserManager/Tenants/detail";
+import Manager from "./Pages/Admin/UserManager/Manager/Manager";
+import DetailManager from "./Pages/Admin/UserManager/Manager/detail";
+import Staff from "./Pages/Admin/UserManager/Staff/Staff";
+import DetailStaff from "./Pages/Admin/UserManager/Staff/detail";
 import Services from "./Pages/Admin/Services/Services";
 
 function App() {
@@ -90,8 +99,33 @@ function App() {
             { path: "detailRoom/:id", Component: DetailRoom },
           ],
         },
+
+        //Router quản lý meters
+        {
+          path: "meters",
+          Component: Meters,
+          children: [
+            { path: "createMeter", Component: CreateMeter },
+            { path: "editMeter/:id", Component: EditMeter },
+            { path: "detailMeter/:id", Component: DetailMeter },
+          ],
+        },
         //Router Quản lý người dùng
-        { path: "tenant", Component: Tenant },
+        {
+          path: "tenant",
+          Component: Tenant,
+          children: [{ path: "detailTenant/:id", Component: DetailTenant }],
+        },
+        {
+          path: "manager",
+          Component: Manager,
+          children: [{ path: "detailManager/:id", Component: DetailManager }],
+        },
+        {
+          path: "staff",
+          Component: Staff,
+          children: [{ path: "detailStaff/:id", Component: DetailStaff }],
+        },
 
         //Router Quản lý dịch vụ
         { path: "services", Component: Services },

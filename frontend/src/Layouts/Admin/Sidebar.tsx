@@ -14,6 +14,8 @@ import {
   Users,
   Warehouse,
   Zap,
+  Gauge,
+  Shield,
 } from "lucide-react";
 import { useOpenMenu, useOpenStore } from "../../Stores/OpenStore";
 import { Link } from "react-router";
@@ -140,7 +142,7 @@ const SidebarAdmin = () => {
                 )}
               </li>
             </Link>
-            <ul className="w-full flex text-[15px] flex-col gap-3  border border-gray-300 p-1 rounded-2xl shadow-sm shadow-gray-400">
+            <ul className="w-full flex text-[15px] flex-col gap-3 p-1 rounded-2xl shadow-sm shadow-gray-400">
               {open === false ? (
                 <li>
                   <div
@@ -273,10 +275,36 @@ const SidebarAdmin = () => {
                       </div>
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      to="/admin/meters"
+                      onClick={() => setAction("/admin/meters")}
+                    >
+                      {" "}
+                      <div
+                        className={`flex items-center gap-2 ${
+                          action == "/admin/meters"
+                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                        }`}
+                      >
+                        {open ? (
+                          <span title="Quản lý đồng hồ">
+                            <Gauge className="pr-1" />
+                          </span>
+                        ) : (
+                          <>
+                            <Gauge />
+                            Quản lý đồng hồ
+                          </>
+                        )}
+                      </div>
+                    </Link>
+                  </li>
                 </ul>
               )}
             </ul>
-            <ul className="w-full flex flex-col gap-3 border border-gray-300 p-1 rounded-2xl shadow-sm shadow-gray-400">
+            <ul className="w-full flex flex-col gap-3 p-1 rounded-2xl shadow-sm shadow-gray-400">
               {open === false ? (
                 <li>
                   <div
@@ -319,33 +347,7 @@ const SidebarAdmin = () => {
                         }`}
                       >
                         {open ? (
-                          <span title="Quản lý khu nhà">
-                            <Users className="pr-1" />
-                          </span>
-                        ) : (
-                          <>
-                            <Users />
-                            Quản lý
-                          </>
-                        )}
-                      </div>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/admin/zones"
-                      onClick={() => setAction("/admin/zones")}
-                    >
-                      {" "}
-                      <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/zones"
-                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
-                      >
-                        {open ? (
-                          <span title="Quản lý khu">
+                          <span title="Quản lý người thuê">
                             <Users className="pr-1" />
                           </span>
                         ) : (
@@ -359,24 +361,50 @@ const SidebarAdmin = () => {
                   </li>
                   <li>
                     <Link
-                      to="/admin/floors"
-                      onClick={() => setAction("/admin/floors")}
+                      to="/admin/manager"
+                      onClick={() => setAction("/admin/manager")}
                     >
                       {" "}
                       <div
                         className={`flex items-center gap-2 ${
-                          action == "/admin/floors"
+                          action == "/admin/manager"
                             ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
                             : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
                         }`}
                       >
                         {open ? (
-                          <span title="Quản lý tầng">
-                            <Users className="pr-1" />
+                          <span title="Quản lý quản lý">
+                            <UserRoundCog className="pr-1" />
                           </span>
                         ) : (
                           <>
-                            <Users />
+                            <UserRoundCog />
+                            Quản lý
+                          </>
+                        )}
+                      </div>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/admin/staff"
+                      onClick={() => setAction("/admin/staff")}
+                    >
+                      {" "}
+                      <div
+                        className={`flex items-center gap-2 ${
+                          action == "/admin/staff"
+                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                        }`}
+                      >
+                        {open ? (
+                          <span title="Quản lý nhân viên">
+                            <Shield className="pr-1" />
+                          </span>
+                        ) : (
+                          <>
+                            <Shield />
                             Nhân viên
                           </>
                         )}

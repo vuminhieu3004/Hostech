@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, message, Modal } from "antd";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useLocation } from "react-router";
 import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { useOpenStore } from "../../../../Stores/OpenStore";
 
@@ -12,10 +12,17 @@ interface PropertyDetail {
 
 const DetailProperty = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams();
   const closeForm = useOpenStore((state) => state.setOpenForm);
   const [data, setData] = useState<PropertyDetail | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      closeForm(false);
+    };
+  }, [closeForm]);
 
   useEffect(() => {
     const mockData: PropertyDetail = {
