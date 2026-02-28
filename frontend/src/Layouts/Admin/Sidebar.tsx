@@ -409,32 +409,6 @@ const SidebarAdmin = () => {
                   </li>
                   <li>
                     <Link
-                      to="/admin/zones"
-                      onClick={() => setAction("/admin/zones")}
-                    >
-                      {" "}
-                      <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/zones"
-                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
-                      >
-                        {open ? (
-                          <span title="Quản lý khu">
-                            <Users className="pr-1" />
-                          </span>
-                        ) : (
-                          <>
-                            <Users />
-                            Người thuê trọ
-                          </>
-                        )}
-                      </div>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
                       to="/admin/manager"
                       onClick={() => setAction("/admin/manager")}
                     >

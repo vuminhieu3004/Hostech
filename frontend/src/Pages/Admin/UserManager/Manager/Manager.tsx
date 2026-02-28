@@ -1,14 +1,15 @@
 import React from "react";
 import type { User } from "../../../../Types/Users";
-import { Link, Outlet } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router";
 import { usePageStore } from "../../../../Stores/PageStore";
 import { useOpenStore } from "../../../../Stores/OpenStore";
 import { Eye, Plus } from "lucide-react";
-import { Table } from "antd";
+import { Table, Button, Tooltip } from "antd";
 
 const Manager = () => {
   const { pages, pageSizes, setPage, setPageSize } = usePageStore();
   const { openForm, setOpenForm } = useOpenStore();
+  const navigate = useNavigate();
   const mockUsers: User[] = [
     {
       id: "111e8400-e29b-41d4-a716-446655440001",
@@ -81,14 +82,20 @@ const Manager = () => {
       key: "action",
       render: (_: any, record: any) => (
         <div className="flex gap-2">
-          <Link
-            to={`detailManager/${record.key}`}
-            onClick={() => setOpenForm(true)}
-          >
-            <button className="flex items-center gap-1 px-3 py-1 rounded bg-green-500 text-white text-sm hover:bg-green-600">
-              <Eye className="w-4 h-4" /> Xem
-            </button>
-          </Link>
+          <Tooltip title="Xem chi tiết">
+            <Button
+              icon={<Eye size={15} />}
+              onClick={() => {
+                setOpenForm(true);
+                navigate(`detailManager/${record.id}`);
+              }}
+              style={{
+                backgroundColor: "#22c55e",
+                borderColor: "#22c55e",
+                color: "white",
+              }}
+            />
+          </Tooltip>
         </div>
       ),
     },
