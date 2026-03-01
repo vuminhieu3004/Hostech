@@ -85,6 +85,7 @@ class RegisterUserController extends Controller
                 'is_active' => true,
                 'failed_login_count' => 0,
                 'invited_by_user_id' => $actor->id,
+                'otp_required' => true,
             ]);
 
             // Gán role tương ứng

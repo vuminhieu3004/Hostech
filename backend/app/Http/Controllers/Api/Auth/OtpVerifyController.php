@@ -8,6 +8,8 @@ use App\Services\AuditLogger;
 use App\Services\AuthSessionService;
 use Illuminate\Http\Request;
 
+use function Psy\debug;
+
 class OtpVerifyController extends Controller
 {
     public function __invoke(Request $request, AuthSessionService $auth)
@@ -18,7 +20,7 @@ class OtpVerifyController extends Controller
 
             'login' => ['nullable', 'string'],
         ]);
-
+        // debug($data);
         // Lấy session -> suy ra org_id và user_id
         $session = UserSession::query()
             ->with(['user:id,org_id,email,phone,is_active'])
@@ -40,6 +42,8 @@ class OtpVerifyController extends Controller
             $session->id,
             $data['otp']
         );
+
+        // debug($tokens);
 
         AuditLogger::log($session->org_id, $session->user_id, 'AUTH_OTP_VERIFY_SUCCESS', 'user_sessions', $session->id, [
             'session_id' => $tokens['session_id'],

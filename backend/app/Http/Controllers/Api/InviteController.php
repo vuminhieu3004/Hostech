@@ -72,8 +72,7 @@ class InviteController extends Controller
     public function store(Request $request)
     {
         $user = $request->user();
-
-        // Only Owner/Manager can create invites
+        //check quyền
         if (!in_array($user->role, ['OWNER', 'MANAGER'])) {
             return response()->json([
                 'success' => false,
@@ -93,8 +92,7 @@ class InviteController extends Controller
             'send_email' => ['nullable', 'boolean'],
             'send_sms' => ['nullable', 'boolean'],
         ]);
-
-        // Must have email or phone
+        //nêu thiếu email và phone
         if (empty($data['target_email']) && empty($data['target_phone'])) {
             return response()->json([
                 'success' => false,
@@ -102,7 +100,7 @@ class InviteController extends Controller
             ], 422);
         }
 
-        // Validate property belongs to org
+        // Validate
         if (!empty($data['property_id'])) {
             $propertyExists = DB::table('properties')
                 ->where('id', $data['property_id'])
@@ -117,7 +115,6 @@ class InviteController extends Controller
             }
         }
 
-        // Validate room belongs to org
         if (!empty($data['room_id'])) {
             $roomExists = DB::table('rooms')
                 ->where('id', $data['room_id'])
@@ -146,7 +143,6 @@ class InviteController extends Controller
                 'meta' => isset($data['message']) ? ['message' => $data['message']] : null,
             ]);
 
-            // Send notifications
             if (!empty($data['send_email']) && $invite->target_email) {
                 $this->inviteService->sendEmail($invite);
             }
@@ -195,9 +191,7 @@ class InviteController extends Controller
         ]);
     }
 
-    /**
-     * DELETE /invites/{invite} - Revoke invite
-     */
+
     public function destroy(Request $request, Invite $invite)
     {
         $user = $request->user();
@@ -234,9 +228,6 @@ class InviteController extends Controller
         ]);
     }
 
-    /**
-     * POST /invites/{invite}/resend - Resend invite notification
-     */
     public function resend(Request $request, Invite $invite)
     {
         $user = $request->user();

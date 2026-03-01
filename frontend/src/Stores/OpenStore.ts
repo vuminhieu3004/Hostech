@@ -3,9 +3,13 @@ import type { IOpenMenu, IOpenTypeStore } from "../Types/StoreType";
 
 export const useOpenStore = create<IOpenTypeStore>((set) => ({
   open: false,
+  openForm: false,
   openRegister: false,
+  openModalSetting: false,
   eyePassword: false,
   setOpen: (open) => set({ open }),
+  setOpenForm: (openForm) => set({ openForm }),
+  setOpenModalSetting: (openModalSetting) => set({ openModalSetting }),
   setEyePassword: (eyePassword) => set({ eyePassword }),
 
   setOpenRegister: (openRegister) => set({ openRegister }),

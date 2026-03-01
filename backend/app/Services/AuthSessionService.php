@@ -49,17 +49,9 @@ class AuthSessionService
             'otp_attempts' => 0,
         ]);
 
-        // Gửi OTP theo phương thức đăng nhập
-        if ($loginMethod === 'phone' && $user->phone) {
-            $otpSvc->sendSms($user->phone, $otp);
-            $method = 'sms';
-        } elseif ($loginMethod === 'email' && $user->email) {
-            $otpSvc->sendEmail($user->email, $otp);
-            $method = 'email';
-        } else {
-            // Fallback: ưu tiên email nếu không rõ login method
-            $method = $otpSvc->send($user->email, $user->phone, $otp);
-        }
+        // Luôn gửi OTP qua email (vì SMS chưa tích hợp)
+        // Trong tương lai khi tích hợp SMS, có thể dùng $loginMethod để chọn
+        $method = $otpSvc->send($user->email, $user->phone, $otp);
 
         $res = [
             'session_id' => $sessionId,
@@ -219,6 +211,57 @@ class AuthSessionService
         return [
             'access_token' => $plainAccessToken,
             'refresh_token' => $plainRefresh,
+        ];
+    }
+
+    /**
+     * Skip OTP và đăng nhập trực tiếp (dùng khi OTP_ENABLED=false)
+     */
+    public function skipOtpAndLogin(User $user, array $device, string $ip, ?string $ua): array
+    {
+        $sessionId = (string) Str::uuid();
+        $refreshTtlDays = (int) env('REFRESH_TTL_DAYS', 30);
+        $accessTtlMinutes = (int) env('JWT_TTL_MINUTES', 60);
+
+        // Tạo session ACTIVE luôn (không cần OTP)
+        $plainRefresh = Str::random(64);
+        $refreshHash = Hash::make($plainRefresh);
+
+        UserSession::create([
+            'id' => $sessionId,
+            'org_id' => $user->org_id,
+            'user_id' => $user->id,
+
+            'device_id' => $device['device_id'] ?? null,
+            'device_name' => $device['device_name'] ?? null,
+            'device_platform' => $device['device_platform'] ?? null,
+            'device_fingerprint' => $device['device_fingerprint'] ?? null,
+
+            'is_trusted' => false,
+            'ip' => $ip,
+            'user_agent' => $ua,
+            'last_seen_at' => now(),
+            'created_at' => now(),
+
+            'status' => 'ACTIVE',
+            'refresh_token_hash' => $refreshHash,
+            'expires_at' => now()->addDays($refreshTtlDays),
+        ]);
+
+        // Tạo JWT access token
+        /** @var JwtService $jwtSvc */
+        $jwtSvc = resolve(JwtService::class);
+        $plainAccessToken = $jwtSvc->createAccessToken($user, $sessionId, $accessTtlMinutes);
+
+        // Cập nhật last_login_at
+        $user->last_login_at = now();
+        $user->save();
+
+        return [
+            'session_id' => $sessionId,
+            'access_token' => $plainAccessToken,
+            'refresh_token' => $plainRefresh,
+            'expires_at' => now()->addDays($refreshTtlDays),
         ];
     }
 }

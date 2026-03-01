@@ -29,31 +29,7 @@ class RegisterOwnerController extends Controller
             'device_platform' => ['nullable', 'string', 'max:50'],
             'device_fingerprint' => ['nullable', 'string', 'max:255'],
         ]);
-        // Validation: Phải có ít nhất email hoặc phone
-        if (empty($data['email']) && empty($data['phone'])) {
-            return response()->json([
-                'message' => 'Vui lòng cung cấp ít nhất email hoặc số điện thoại.'
-            ], 422);
-        }
 
-        // Kiểm tra email/phone đã tồn tại chưa
-        if (!empty($data['email'])) {
-            $existingEmail = User::where('email', $data['email'])->first();
-            if ($existingEmail) {
-                return response()->json([
-                    'message' => 'Email đã được sử dụng.'
-                ], 422);
-            }
-        }
-
-        if (!empty($data['phone'])) {
-            $existingPhone = User::where('phone', $data['phone'])->first();
-            if ($existingPhone) {
-                return response()->json([
-                    'message' => 'Số điện thoại đã được sử dụng.'
-                ], 422);
-            }
-        }
         // Validation: Phải có ít nhất email hoặc phone
         if (empty($data['email']) && empty($data['phone'])) {
             return response()->json([
@@ -100,6 +76,7 @@ class RegisterOwnerController extends Controller
                 'password_hash' => Hash::make($data['password']),
                 'is_active' => true,
                 'failed_login_count' => 0,
+                'otp_required' => true,
             ]);
 
             $user->syncRoles(['Owner']);

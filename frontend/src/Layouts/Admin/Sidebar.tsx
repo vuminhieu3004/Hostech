@@ -2,36 +2,35 @@ import {
   ChartSpline,
   ChevronDown,
   ChevronRight,
+  FileText,
   House,
   LayoutDashboard,
   MapPinCheck,
   MapPinHouse,
   PanelRightClose,
   PanelRightOpen,
+  Receipt,
   StretchHorizontal,
   UserPen,
   UserRoundCog,
   Users,
   Warehouse,
+  Zap,
 } from "lucide-react";
 import { useOpenMenu, useOpenStore } from "../../Stores/OpenStore";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import Register from "../../Components/Auth/Register";
+import Authorization from "../../Components/Auth/verifyLogin";
+import { useTokenStore } from "../../Stores/AuthStore";
 
 const SidebarAdmin = () => {
   const { open, openRegister, setOpen, setOpenRegister } = useOpenStore();
-  const {
-    openMenu1,
-    openMenu2,
-    openMenu3,
-    setOpenMenu1,
-    setOpenMenu2,
-    setOpenMenu3,
-  } = useOpenMenu();
+  const { openMenu1, openMenu2, setOpenMenu1, setOpenMenu2 } = useOpenMenu();
   const location = useLocation();
   const [action, setAction] = useState<string>(location.pathname);
+  const role = useTokenStore((state) => state.role);
 
   useEffect(() => {
     if (openRegister) {
@@ -40,9 +39,8 @@ const SidebarAdmin = () => {
   }, [location.pathname, openRegister]);
   return (
     <div
-      className={`h-auto duration-500 ease-in-out shadow ${
-        open ? "w-[6%]" : "w-[20%]"
-      }`}
+      className={`h-auto duration-500 ease-in-out shadow ${open ? "w-[6%]" : "w-[20%]"
+        }`}
     >
       <section className="relative">
         <div className="border-b border-gray-300 shadow-sm">
@@ -50,7 +48,7 @@ const SidebarAdmin = () => {
             <img
               src="/images/logo_du_an.jpg"
               alt=""
-              className="w-13 h-13 rounded-full m-4 "
+              className="w-13 h-13 rounded-full m-3.5"
             />
             <p
               className={`font-semibold text-blue-900 text-2xl ${open ? "pl-2" : ""}`}
@@ -62,26 +60,25 @@ const SidebarAdmin = () => {
             {open ? (
               <PanelRightClose
                 onClick={() => setOpen(!open)}
-                className="absolute cursor-pointer text-blue-900 inset-y-9 -right-3"
+                className="absolute cursor-pointer text-blue-900 inset-y-7.5 -right-3 hover:text-blue-700"
               />
             ) : (
               <PanelRightOpen
                 onClick={() => setOpen(!open)}
-                className="absolute cursor-pointer text-blue-900 inset-y-9 -right-3"
+                className="absolute cursor-pointer text-blue-900 inset-y-7.5 -right-3 hover:text-blue-700"
               />
             )}
           </div>
         </div>
         <div>
-          <ul className="ul p-5 pt-4 flex flex-col gap-2 max-h-150 overflow-scroll">
+          <ul className="ul text-[15px] p-5 pt-4 flex flex-col gap-2 max-h-150 overflow-scroll">
             <Link
               to="/admin"
               onClick={() => setAction("/admin")}
-              className={`${
-                action == "/admin"
-                  ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                  : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-              }`}
+              className={`${action == "/admin"
+                ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                }`}
             >
               {" "}
               <li className="flex items-center gap-2">
@@ -100,11 +97,10 @@ const SidebarAdmin = () => {
             <Link
               to="/admin/statistical"
               onClick={() => setAction("/admin/statistical")}
-              className={`${
-                action == "/admin/statistical"
-                  ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                  : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-              }`}
+              className={`${action == "/admin/statistical"
+                ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                }`}
             >
               {" "}
               <li className="flex items-center gap-2">
@@ -120,7 +116,73 @@ const SidebarAdmin = () => {
                 )}
               </li>
             </Link>
-            <ul className="w-full flex flex-col gap-3  border border-gray-300 p-1 rounded-2xl shadow-sm shadow-gray-400">
+            <Link
+              to="/admin/services"
+              onClick={() => setAction("/admin/services")}
+              className={`${action == "/admin/services"
+                ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                }`}
+            >
+              {" "}
+              <li className="flex items-center gap-2">
+                {open ? (
+                  <span title="Dịch vụ">
+                    <Zap className="pr-1" />
+                  </span>
+                ) : (
+                  <>
+                    <Zap />
+                    Dịch vụ
+                  </>
+                )}
+              </li>
+            </Link>
+            <Link
+              to="/admin/contracts"
+              onClick={() => setAction("/admin/contracts")}
+              className={`${action == "/admin/contracts"
+                ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                }`}
+            >
+              {" "}
+              <li className="flex items-center gap-2">
+                {open ? (
+                  <span title="Hợp đồng">
+                    <FileText className="pr-1" />
+                  </span>
+                ) : (
+                  <>
+                    <FileText />
+                    Hợp đồng
+                  </>
+                )}
+              </li>
+            </Link>
+            <Link
+              to="/admin/invoices"
+              onClick={() => setAction("/admin/invoices")}
+              className={`${action == "/admin/invoices"
+                ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                }`}
+            >
+              {" "}
+              <li className="flex items-center gap-2">
+                {open ? (
+                  <span title="Hóa đơn">
+                    <Receipt className="pr-1" />
+                  </span>
+                ) : (
+                  <>
+                    <Receipt />
+                    Hóa đơn
+                  </>
+                )}
+              </li>
+            </Link>
+            <ul className="w-full flex text-[15px] flex-col gap-3  border border-gray-300 p-1 rounded-2xl shadow-sm shadow-gray-400">
               {open === false ? (
                 <li>
                   <div
@@ -145,9 +207,8 @@ const SidebarAdmin = () => {
               )}
               {openMenu1 && (
                 <ul
-                  className={`flex flex-col justify-center gap-1 border p-2 pl-3.5 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${
-                    open == true ? "items-center" : ""
-                  }`}
+                  className={`flex flex-col justify-center gap-1 border p-2 pl-3.5 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${open == true ? "items-center" : ""
+                    }`}
                 >
                   <li>
                     <Link
@@ -156,11 +217,10 @@ const SidebarAdmin = () => {
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2  ${
-                          action == "/admin/properties"
-                            ? "bg-blue-500 p-4 text-white shadow-sm shadow-gray-300 font-bold text-[15px] rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2  ${action == "/admin/properties"
+                          ? "bg-blue-500 p-4 text-white shadow-sm shadow-gray-300 font-bold text-[15px] rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý khu nhà">
@@ -177,16 +237,15 @@ const SidebarAdmin = () => {
                   </li>
                   <li>
                     <Link
-                      to="/admin/zones"
-                      onClick={() => setAction("/admin/zones")}
+                      to="/admin/orgs"
+                      onClick={() => setAction("/admin/orgs")}
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/zones"
-                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2 ${action == "/admin/orgs"
+                          ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý khu">
@@ -195,7 +254,7 @@ const SidebarAdmin = () => {
                         ) : (
                           <>
                             <MapPinCheck />
-                            Quản lý khu
+                            Quản lý tổ chức
                           </>
                         )}
                       </div>
@@ -208,11 +267,10 @@ const SidebarAdmin = () => {
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/floors"
-                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2 ${action == "/admin/floors"
+                          ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý tầng">
@@ -234,11 +292,10 @@ const SidebarAdmin = () => {
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/rooms"
-                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2 ${action == "/admin/rooms"
+                          ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý phòng">
@@ -281,22 +338,20 @@ const SidebarAdmin = () => {
               )}
               {openMenu2 && (
                 <ul
-                  className={`flex flex-col justify-center gap-1 border p-2 pl-3.5 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${
-                    open == true ? "items-center" : ""
-                  }`}
+                  className={`flex flex-col justify-center gap-1 border p-2 pl-3.5 border-gray-300 inset-shadow-sm inset-shadow-gray-300 overflow-hidden rounded-2xl ${open == true ? "items-center" : ""
+                    }`}
                 >
                   <li>
                     <Link
-                      to="/admin/properties"
-                      onClick={() => setAction("/admin/properties")}
+                      to="/admin/tenant"
+                      onClick={() => setAction("/admin/tenant")}
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/properties"
-                            ? "bg-blue-500 p-4 text-white shadow-sm shadow-gray-300 font-bold text-[15px] rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2 ${action == "/admin/tenant"
+                          ? "bg-blue-500 p-4 text-white shadow-sm shadow-gray-300 font-bold text-[15px] rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý khu nhà">
@@ -318,11 +373,10 @@ const SidebarAdmin = () => {
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/zones"
-                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2 ${action == "/admin/zones"
+                          ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý khu">
@@ -344,11 +398,10 @@ const SidebarAdmin = () => {
                     >
                       {" "}
                       <div
-                        className={`flex items-center gap-2 ${
-                          action == "/admin/floors"
-                            ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
-                            : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
-                        }`}
+                        className={`flex items-center gap-2 ${action == "/admin/floors"
+                          ? "bg-blue-500 p-4 text-white font-bold text-[15px] shadow-sm shadow-gray-300 rounded-2xl"
+                          : "hover:bg-blue-300 rounded-2xl p-4 hover:text-white"
+                          }`}
                       >
                         {open ? (
                           <span title="Quản lý tầng">
@@ -364,15 +417,31 @@ const SidebarAdmin = () => {
                     </Link>
                   </li>
                   <li>
-                    <Register open={openRegister}>
-                      <button
-                        className={`${openRegister ? "flex items-center gap-1 bg-blue-500 p-4 text-white font-bold text-[14px] shadow-sm shadow-gray-300 rounded-2xl" : "flex items-center gap-1 p-4 text-[15px] cursor-pointer hover:bg-blue-300 rounded-2xl hover:text-white"}`}
-                        onClick={() => setOpenRegister(true)}
+                    {role && (
+                      <Authorization
+                        role={role || ""}
+                        allowRole={["OWNER", "MANAGER"]}
                       >
-                        <UserPen />
-                        Thêm người thuê
-                      </button>
-                    </Register>
+                        <Register open={openRegister}>
+                          {open ? (
+                            <button
+                              className={`${openRegister ? "flex items-center gap-1 bg-blue-500 p-4 text-white font-bold text-[14px] shadow-sm shadow-gray-300 rounded-2xl" : "flex items-center gap-1 p-4 text-[15px] cursor-pointer hover:bg-blue-300 rounded-2xl hover:text-white"}`}
+                              onClick={() => setOpenRegister(true)}
+                            >
+                              <UserPen />
+                            </button>
+                          ) : (
+                            <button
+                              className={`${openRegister ? "flex items-center gap-1 bg-blue-500 p-4 text-white font-bold text-[14px] shadow-sm shadow-gray-300 rounded-2xl" : "flex items-center gap-1 p-4 text-[15px] cursor-pointer hover:bg-blue-300 rounded-2xl hover:text-white"}`}
+                              onClick={() => setOpenRegister(true)}
+                            >
+                              <UserPen />
+                              Thêm người thuê
+                            </button>
+                          )}
+                        </Register>
+                      </Authorization>
+                    )}
                   </li>
                 </ul>
               )}

@@ -1,13 +1,23 @@
-import React from "react";
 import type { TGlobalProp } from "../../Types/ReactType";
-import { useNavigate } from "react-router";
+import { Navigate } from "react-router";
+import { message } from "antd";
+import { useTokenStore } from "../../Stores/AuthStore";
 
-const verifyLogin = ({ children, actor }: TGlobalProp<{ actor: string }>) => {
-  const nav = useNavigate();
-  if (!actor) {
-    return nav("/auth", { replace: true });
+const Authorization = ({
+  children,
+  allowRole,
+  role,
+}: TGlobalProp<{ role: string; allowRole: string[] }>) => {
+  const token = useTokenStore((state) => state.token);
+  if (!token) {
+    return null;
   }
-  return <div>{children}</div>;
+  if (!allowRole.includes(role)) {
+    message.error("Bạn ko có quyền vào chức năng này!");
+    return <Navigate to={"/"} replace />;
+  }
+
+  return children;
 };
 
-export default verifyLogin;
+export default Authorization;

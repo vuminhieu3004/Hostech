@@ -28,6 +28,19 @@ class JwtService
         $issuedAt = time();
         $expireAt = $issuedAt + ($ttlMinutes * 60);
 
+        // Lấy property roles của user
+        $propertyRoles = $user->propertyUserRoles()
+            ->where('is_active', true)
+            ->get()
+            ->map(function ($propertyRole) {
+                return [
+                    'property_id' => $propertyRole->property_id,
+                    'role' => $propertyRole->role,
+                    'permissions' => $propertyRole->permissions,
+                ];
+            })
+            ->toArray();
+
         $payload = [
             'iss' => env('APP_URL', 'http://localhost'),
             'iat' => $issuedAt,
@@ -42,7 +55,11 @@ class JwtService
                 'phone' => $user->phone,
                 'name' => $user->name,
                 'is_active' => $user->is_active,
+                'role' => $user->role, // Role cấp org
             ],
+
+            // Property roles của user
+            'property_roles' => $propertyRoles,
 
             // Session ID để liên kết với UserSession
             'session_id' => $sessionId,
@@ -90,7 +107,8 @@ class JwtService
     }
 
     /**
-     * Lấy session_id từ token
+     * 
+     * * Lấy session_id từ token
      */
     public function getSessionId(string $token): ?string
     {

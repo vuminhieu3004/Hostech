@@ -91,7 +91,7 @@ class UserSeeder extends Seeder
         $demoOrg = Org::create([
             'name' => 'Hostech Demo Company',
             'phone' => '0368326144',
-            'email' => 'vutienhieu202@gmail.com',
+            'email' => 'phungxuanquy24721@gmail.com',
             'address' => 'Hanoi, Vietnam',
             'timezone' => 'Asia/Ho_Chi_Minh',
             'currency' => 'VND',
@@ -100,7 +100,7 @@ class UserSeeder extends Seeder
         $demoOwner = User::factory()->owner()->create([
             'org_id' => $demoOrg->id,
             'full_name' => 'Demo Owner',
-            'email' => 'vutienhieu202@gmail.com',
+            'email' => 'phungxuanquy24721@gmail.com',
             'phone' => '0368326144',
             'password_hash' => Hash::make('12345678'),
         ]);

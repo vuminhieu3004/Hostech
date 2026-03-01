@@ -14,6 +14,8 @@ class RbacMiddleware
         $user = $request->user();
 
         $propertyId = null;
+
+        // Try to get property from route parameter
         $raw = $request->route($propertyParam);
 
         if (is_object($raw) && method_exists($raw, 'getKey')) {
@@ -22,8 +24,17 @@ class RbacMiddleware
             $propertyId = $raw;
         }
 
+        // If not found, try to get from request body
         if (!$propertyId && $request->has('property_id')) {
             $propertyId = (string) $request->input('property_id');
+        }
+
+        // If still not found, try to infer from room model (for room-specific routes)
+        if (!$propertyId) {
+            $room = $request->route('room');
+            if (is_object($room) && isset($room->property_id)) {
+                $propertyId = (string) $room->property_id;
+            }
         }
 
         app(PolicyEngine::class)->authorize($user, $permission, $propertyId);

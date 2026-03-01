@@ -35,9 +35,10 @@ class PropertyAccessService
         });
     }
 
-    public function clearUser(User $user): void
+    public function clearUser(User|string $user): void
     {
-        Cache::forget($this->key($user));
+        $userId = is_string($user) ? $user : $user->id;
+        Cache::forget("props:allowed:{$userId}");
     }
 
     private function key(User $user): string
