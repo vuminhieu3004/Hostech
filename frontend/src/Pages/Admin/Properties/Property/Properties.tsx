@@ -1,12 +1,13 @@
-import { Table } from "antd";
+import { Table, Button, Tooltip } from "antd";
 import { usePageStore } from "../../../../Stores/PageStore";
 import { Plus, Edit, Eye } from "lucide-react";
-import { Link, Outlet } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router";
 import { useOpenStore } from "../../../../Stores/OpenStore";
 
 const Properties = () => {
   const { pages, pageSizes, setPage, setPageSize } = usePageStore();
   const { openForm, setOpenForm } = useOpenStore();
+  const navigate = useNavigate();
   const dataSource = [
     {
       key: "1-1",
@@ -31,22 +32,34 @@ const Properties = () => {
       key: "action",
       render: (_: any, record: any) => (
         <div className="flex gap-2">
-          <Link
-            to={`detailProperty/${record.key}`}
-            onClick={() => setOpenForm(true)}
-          >
-            <button className="flex items-center gap-1 px-3 py-1 rounded bg-green-500 text-white text-sm hover:bg-green-600">
-              <Eye className="w-4 h-4" /> Xem
-            </button>
-          </Link>
-          <Link
-            to={`editProperty/${record.key}`}
-            onClick={() => setOpenForm(true)}
-          >
-            <button className="flex items-center gap-1 px-3 py-1 rounded bg-blue-500 text-white text-sm hover:bg-blue-600">
-              <Edit className="w-4 h-4" /> Sửa
-            </button>
-          </Link>
+          <Tooltip title="Xem chi tiết">
+            <Button
+              icon={<Eye size={15} />}
+              onClick={() => {
+                setOpenForm(true);
+                navigate(`detailProperty/${record.key}`);
+              }}
+              style={{
+                backgroundColor: "#22c55e",
+                borderColor: "#22c55e",
+                color: "white",
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Sửa">
+            <Button
+              icon={<Edit size={15} />}
+              onClick={() => {
+                setOpenForm(true);
+                navigate(`editProperty/${record.key}`);
+              }}
+              style={{
+                backgroundColor: "#0ea5e9",
+                borderColor: "#0ea5e9",
+                color: "white",
+              }}
+            />
+          </Tooltip>
         </div>
       ),
     },
@@ -65,11 +78,19 @@ const Properties = () => {
                 className="border border-gray-400 w-50 rounded-[10px] p-1 pl-2 focus:outline-none placeholder:text-[13px]"
               />
             </div>
-            <Link to="createProperty" onClick={() => setOpenForm(true)}>
-              <div className="flex items-center h-10 mt-2 pl-2 pr-2 w-content rounded-[10px] gap-1 bg-blue-400 p-1 text-black/60 font-semibold hover:text-white hover:font-bold cursor-pointer">
-                <Plus className="w-5" /> thêm nhà
-              </div>
-            </Link>
+            <div className="flex gap-2">
+              <Button
+                type="primary"
+                icon={<Plus size={15} />}
+                onClick={() => {
+                  setOpenForm(true);
+                  navigate("createProperty");
+                }}
+                className="bg-blue-600"
+              >
+                Thêm nhà
+              </Button>
+            </div>
           </div>
           <Table
             rowKey="key"

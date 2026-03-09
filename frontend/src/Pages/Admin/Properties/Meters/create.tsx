@@ -1,33 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Button, Input, message } from "antd";
+import { Button, Input, Select, message } from "antd";
 import { useNavigate, useLocation } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { useOpenStore } from "../../../../Stores/OpenStore";
+import type { FormErrors, MeterForm } from "../../../../Types/Meter.Type";
 
-interface CreateOrgForm {
-  name: string;
-  phone: string;
-  email: string;
-  address?: string;
-}
-
-interface FormErrors {
-  name?: string;
-  phone?: string;
-  email?: string;
-  address?: string;
-  general?: string;
-}
-
-const CreateOrg = () => {
+const CreateMeter = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const closeForm = useOpenStore((state) => state.setOpenForm);
-  const [formData, setFormData] = useState<CreateOrgForm>({
+  const [formData, setFormData] = useState<MeterForm>({
     name: "",
-    phone: "",
-    email: "",
-    address: "",
+    room_id: "",
+    meter_type: "",
+    meter_number: "",
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
@@ -38,23 +24,35 @@ const CreateOrg = () => {
     };
   }, [closeForm]);
 
+  const rooms = [
+    { id: "1", label: "Phòng 101", value: "1" },
+    { id: "2", label: "Phòng 102", value: "2" },
+    { id: "3", label: "Phòng 201", value: "3" },
+  ];
+
+  const meterTypes = [
+    { id: "1", label: "Điện", value: "Điện" },
+    { id: "2", label: "Nước", value: "Nước" },
+    { id: "3", label: "Gas", value: "Gas" },
+  ];
+
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Tên tổ chức không được để trống";
+      newErrors.name = "Tên đồng hồ không được để trống";
     }
 
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Số điện thoại không được để trống";
-    } else if (!/^\d{10,11}$/.test(formData.phone.replace(/\D/g, ""))) {
-      newErrors.phone = "Số điện thoại không hợp lệ";
+    if (!formData.room_id) {
+      newErrors.room_id = "Phòng không được để trống";
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = "Email không được để trống";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Email không hợp lệ";
+    if (!formData.meter_type) {
+      newErrors.meter_type = "Loại đồng hồ không được để trống";
+    }
+
+    if (!(formData.meter_number ?? "").trim()) {
+      newErrors.meter_number = "Số hiệu không được để trống";
     }
 
     setErrors(newErrors);
@@ -63,6 +61,20 @@ const CreateOrg = () => {
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (errors[name as keyof FormErrors]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: undefined,
+      }));
+    }
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -87,12 +99,12 @@ const CreateOrg = () => {
     try {
       console.log("data: ", formData);
 
-      message.success("Thêm tổ chức thành công!");
+      message.success("Thêm đồng hồ thành công!");
       closeForm(false);
       navigate(-1);
     } catch (err: any) {
       const errorMessage =
-        err?.response?.data?.message || "Lỗi khi thêm tổ chức";
+        err?.response?.data?.message || "Lỗi khi thêm đồng hồ";
       setErrors((prev) => ({
         ...prev,
         general: errorMessage,
@@ -108,14 +120,13 @@ const CreateOrg = () => {
       <div className="flex items-center gap-2 mb-5">
         <button
           onClick={() => {
-            navigate(-1);
-            closeForm(false);
+            (navigate(-1), closeForm(false));
           }}
           className="p-2 hover:bg-gray-100 rounded-lg"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-2xl font-bold">Thêm tổ chức mới</h1>
+        <h1 className="text-2xl font-bold">Thêm đồng hồ mới</h1>
       </div>
 
       <form
@@ -130,11 +141,11 @@ const CreateOrg = () => {
 
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-2">
-            Tên tổ chức <span className="text-red-500">*</span>
+            Tên đồng hồ <span className="text-red-500">*</span>
           </label>
           <Input
             name="name"
-            placeholder="Nhập tên tổ chức"
+            placeholder="Nhập tên đồng hồ"
             value={formData.name}
             onChange={handleInputChange}
             status={errors.name ? "error" : ""}
@@ -147,51 +158,52 @@ const CreateOrg = () => {
 
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-2">
-            Số điện thoại <span className="text-red-500">*</span>
+            Phòng <span className="text-red-500">*</span>
           </label>
-          <Input
-            name="phone"
-            placeholder="Nhập số điện thoại"
-            value={formData.phone}
-            onChange={handleInputChange}
-            status={errors.phone ? "error" : ""}
-            className="rounded"
+          <Select
+            placeholder="Chọn phòng"
+            options={rooms}
+            value={formData.room_id || undefined}
+            onChange={(value) => handleSelectChange("room_id", value)}
+            status={errors.room_id ? "error" : ""}
+            className="w-full"
           />
-          {errors.phone && (
-            <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+          {errors.room_id && (
+            <p className="text-red-500 text-sm mt-1">{errors.room_id}</p>
           )}
         </div>
 
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-2">
-            Email <span className="text-red-500">*</span>
+            Loại đồng hồ <span className="text-red-500">*</span>
           </label>
-          <Input
-            name="email"
-            placeholder="Nhập email"
-            type="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            status={errors.email ? "error" : ""}
-            className="rounded"
+          <Select
+            placeholder="Chọn loại đồng hồ"
+            options={meterTypes}
+            value={formData.meter_type || undefined}
+            onChange={(value) => handleSelectChange("meter_type", value)}
+            status={errors.meter_type ? "error" : ""}
+            className="w-full"
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          {errors.meter_type && (
+            <p className="text-red-500 text-sm mt-1">{errors.meter_type}</p>
           )}
         </div>
 
         <div className="mb-6">
-          <label className="block text-sm font-semibold mb-2">Địa chỉ</label>
+          <label className="block text-sm font-semibold mb-2">
+            Số hiệu <span className="text-red-500">*</span>
+          </label>
           <Input
-            name="address"
-            placeholder="Nhập địa chỉ"
-            value={formData.address}
+            name="meter_number"
+            placeholder="Nhập số hiệu đồng hồ"
+            value={formData.meter_number}
             onChange={handleInputChange}
-            status={errors.address ? "error" : ""}
+            status={errors.meter_number ? "error" : ""}
             className="rounded"
           />
-          {errors.address && (
-            <p className="text-red-500 text-sm mt-1">{errors.address}</p>
+          {errors.meter_number && (
+            <p className="text-red-500 text-sm mt-1">{errors.meter_number}</p>
           )}
         </div>
 
@@ -202,20 +214,13 @@ const CreateOrg = () => {
             loading={loading}
             className="bg-blue-500"
           >
-            Thêm tổ chức
+            Thêm đồng hồ
           </Button>
-          <Button
-            onClick={() => {
-              navigate(-1);
-              closeForm(false);
-            }}
-          >
-            Hủy
-          </Button>
+          <Button onClick={() => navigate(-1)}>Hủy</Button>
         </div>
       </form>
     </div>
   );
 };
 
-export default CreateOrg;
+export default CreateMeter;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Input, Form, message } from "antd";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useLocation } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { useOpenStore } from "../../../../Stores/OpenStore";
 
@@ -19,6 +19,7 @@ interface FormErrors {
 
 const EditProperty = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams();
   const closeForm = useOpenStore((state) => state.setOpenForm);
   const [formData, setFormData] = useState<EditPropertyForm>({
@@ -28,6 +29,12 @@ const EditProperty = () => {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      closeForm(false);
+    };
+  }, [closeForm]);
 
   useEffect(() => {
     const mockData = {

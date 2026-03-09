@@ -6,7 +6,7 @@ import { useOpenStore } from "../../../../Stores/OpenStore";
 import { Eye, Plus } from "lucide-react";
 import { Table, Button, Tooltip } from "antd";
 
-const Tenant = () => {
+const Manager = () => {
   const { pages, pageSizes, setPage, setPageSize } = usePageStore();
   const { openForm, setOpenForm } = useOpenStore();
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ const Tenant = () => {
     },
   ];
 
-  const tenantColumns = [
+  const managerColumns = [
     {
       title: "Tên quản lý",
       dataIndex: "full_name",
@@ -87,7 +87,7 @@ const Tenant = () => {
               icon={<Eye size={15} />}
               onClick={() => {
                 setOpenForm(true);
-                navigate(`detailTenant/${record.id}`);
+                navigate(`detailManager/${record.id}`);
               }}
               style={{
                 backgroundColor: "#22c55e",
@@ -110,11 +110,11 @@ const Tenant = () => {
               <label className="text-[13px] pl-2 font-bold">Tên quản lý</label>
               <input
                 type="text"
-                placeholder="Tìm kiếm theo tên khu..."
+                placeholder="Tìm kiếm theo tên quản lý..."
                 className="border border-gray-400 w-50 rounded-[10px] p-1 pl-2 focus:outline-none placeholder:text-[13px]"
               />
             </div>
-            <Link to="createProperty" onClick={() => setOpenForm(true)}>
+            <Link to="createManager" onClick={() => setOpenForm(true)}>
               <div className="flex items-center h-10 mt-2 pl-2 pr-2 w-content rounded-[10px] gap-1 bg-blue-400 p-1 text-black/60 font-semibold hover:text-white hover:font-bold cursor-pointer">
                 <Plus className="w-5" /> thêm quản lý
               </div>
@@ -122,7 +122,7 @@ const Tenant = () => {
           </div>
           <Table
             rowKey="key"
-            columns={tenantColumns}
+            columns={managerColumns}
             dataSource={mockUsers}
             pagination={{
               current: pages,
@@ -142,4 +142,4 @@ const Tenant = () => {
   );
 };
 
-export default Tenant;
+export default Manager;

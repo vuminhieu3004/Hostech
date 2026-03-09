@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Input, message } from "antd";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { useOpenStore } from "../../../../Stores/OpenStore";
 
@@ -15,12 +15,19 @@ interface FormErrors {
 
 const CreateFloor = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const closeForm = useOpenStore((state) => state.setOpenForm);
-  const [formData, setFormData] = useState<CreateFloorForm>({
+  const [formData, setFormData] = useState({
     name: "",
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      closeForm(false);
+    };
+  }, [closeForm]);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};

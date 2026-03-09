@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Input, Form, message } from "antd";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { useOpenStore } from "../../../../Stores/OpenStore";
 
@@ -19,6 +19,7 @@ interface FormErrors {
 
 const CreateProperty = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const closeForm = useOpenStore((state) => state.setOpenForm);
   const [formData, setFormData] = useState<CreatePropertyForm>({
     name: "",
@@ -27,6 +28,12 @@ const CreateProperty = () => {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      closeForm(false);
+    };
+  }, [closeForm]);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Input, Select, message } from "antd";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { useOpenStore } from "../../../../Stores/OpenStore";
 
@@ -18,6 +18,7 @@ interface FormErrors {
 
 const CreateRoom = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const closeForm = useOpenStore((state) => state.setOpenForm);
   const [formData, setFormData] = useState<CreateRoomForm>({
     name: "",
@@ -26,6 +27,12 @@ const CreateRoom = () => {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      closeForm(false);
+    };
+  }, [closeForm]);
 
   const floors = [
     { id: "1", label: "Tầng 1", value: "1" },

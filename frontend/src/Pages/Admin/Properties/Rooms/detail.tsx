@@ -1,23 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { Button, message, Modal, Tag } from "antd";
-import { useNavigate, useParams } from "react-router";
-import { ArrowLeft, Edit, Trash2, Building2 } from "lucide-react";
+import { Button, message, Modal, Tag, Table } from "antd";
+import { useNavigate, useParams, useLocation } from "react-router";
+import {
+  ArrowLeft,
+  Edit,
+  Trash2,
+  Building2,
+  Image,
+  DollarSign,
+} from "lucide-react";
 import { useOpenStore } from "../../../../Stores/OpenStore";
-
-interface RoomDetail {
-  name: string;
-  floor_id: { id: number; name: string };
-  zone_id: { id: number; name: string };
-  status: number;
-}
+import type {
+  RoomDetail,
+  RoomPhoto,
+  RoomPrice,
+} from "../../../../Types/Room.type";
 
 const DetailRoom = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams();
   const closeForm = useOpenStore((state) => state.setOpenForm);
   const [data, setData] = useState<RoomDetail | null>(null);
+  const [photos, setPhotos] = useState<RoomPhoto[]>([]);
+  const [prices, setPrices] = useState<RoomPrice[]>([]);
 
   useEffect(() => {
+    return () => {
+      closeForm(false);
+    };
+  }, [closeForm]);
+
+  useEffect(() => {
+    // TODO: gọi API để lấy chi tiết phòng theo id
     const mockData: RoomDetail = {
       name: "Phòng 101",
       floor_id: { id: 1, name: "Tầng 1" },
@@ -25,6 +40,67 @@ const DetailRoom = () => {
       status: 1,
     };
     setData(mockData);
+
+    // TODO: gọi API để lấy hình ảnh phòng
+    const mockPhotos: RoomPhoto[] = [
+      {
+        id: 1,
+        room_id: 1,
+        photo_url: "https://via.placeholder.com/300x200?text=Phòng+1",
+        photo_name: "Phòng chính",
+        description: "Hình ảnh toàn cảnh phòng",
+        created_at: "2026-02-28",
+      },
+      {
+        id: 2,
+        room_id: 1,
+        photo_url: "https://via.placeholder.com/300x200?text=Phòng+2",
+        photo_name: "Phòng tắm",
+        description: "Hình ảnh phòng tắm",
+        created_at: "2026-02-28",
+      },
+      {
+        id: 3,
+        room_id: 1,
+        photo_url: "https://via.placeholder.com/300x200?text=Phòng+3",
+        photo_name: "Bếp",
+        description: "Hình ảnh khu bếp",
+        created_at: "2026-02-28",
+      },
+    ];
+    setPhotos(mockPhotos);
+
+    // TODO: gọi API để lấy bảng giá phòng
+    const mockPrices: RoomPrice[] = [
+      {
+        id: 1,
+        room_id: 1,
+        price: 5000000,
+        currency: "VND",
+        price_type: "monthly",
+        effective_date: "2026-01-01",
+        is_active: true,
+      },
+      {
+        id: 2,
+        room_id: 1,
+        price: 14000000,
+        currency: "VND",
+        price_type: "quarterly",
+        effective_date: "2026-01-01",
+        is_active: true,
+      },
+      {
+        id: 3,
+        room_id: 1,
+        price: 54000000,
+        currency: "VND",
+        price_type: "yearly",
+        effective_date: "2026-01-01",
+        is_active: true,
+      },
+    ];
+    setPrices(mockPrices);
   }, [id]);
 
   const handleEdit = () => {
@@ -127,6 +203,114 @@ const DetailRoom = () => {
             {data.zone_id.name}
           </p>
         </div>
+      </div>
+
+      {/* Hình ảnh phòng */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <Image className="w-6 h-6 text-blue-500" />
+          <h2 className="text-lg font-semibold text-gray-700">
+            Hình ảnh phòng
+          </h2>
+        </div>
+        {photos.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {photos.map((photo) => (
+              <div
+                key={photo.id}
+                className="flex flex-col rounded-lg overflow-hidden shadow-md hover:shadow-lg transition"
+              >
+                <img
+                  src={photo.photo_url}
+                  alt={photo.photo_name}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-3 bg-gray-50">
+                  <p className="font-semibold text-sm text-gray-800">
+                    {photo.photo_name}
+                  </p>
+                  {photo.description && (
+                    <p className="text-xs text-gray-600 mt-1">
+                      {photo.description}
+                    </p>
+                  )}
+                  {photo.created_at && (
+                    <p className="text-xs text-gray-500 mt-2">
+                      {photo.created_at}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-500 text-center py-8">Không có hình ảnh</p>
+        )}
+      </div>
+
+      {/* Bảng giá phòng */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <DollarSign className="w-6 h-6 text-green-500" />
+          <h2 className="text-lg font-semibold text-gray-700">Bảng giá</h2>
+        </div>
+        {prices.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-gray-100 border-b border-gray-300">
+                  <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                    Loại giá
+                  </th>
+                  <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                    Giá tiền
+                  </th>
+                  <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                    Loại tiền
+                  </th>
+                  <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                    Ngày hiệu lực
+                  </th>
+                  <th className="px-4 py-2 text-center font-semibold text-gray-700">
+                    Trạng thái
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {prices.map((price, index) => (
+                  <tr
+                    key={price.id}
+                    className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                  >
+                    <td className="px-4 py-3 text-gray-800 font-medium">
+                      {price.price_type === "monthly"
+                        ? "Hàng tháng"
+                        : price.price_type === "quarterly"
+                          ? "Hàng quý"
+                          : "Hàng năm"}
+                    </td>
+                    <td className="px-4 py-3 text-gray-800 font-semibold text-green-600">
+                      {price.price.toLocaleString("vi-VN")}
+                    </td>
+                    <td className="px-4 py-3 text-gray-600">
+                      {price.currency}
+                    </td>
+                    <td className="px-4 py-3 text-gray-600">
+                      {price.effective_date}
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      <Tag color={price.is_active ? "green" : "red"}>
+                        {price.is_active ? "Hoạt động" : "Không hoạt động"}
+                      </Tag>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-gray-500 text-center py-8">Không có bảng giá</p>
+        )}
       </div>
 
       <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-6">
